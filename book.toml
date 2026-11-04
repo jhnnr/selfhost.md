@@ -1,0 +1,20 @@
+[book]
+authors = ["jhnnr"]
+language = "en"
+src = "docs"
+title = "selfhost.md"
+description = "Homelab Infrastructure & Selfhosting Documentation"
+
+[build]
+build-dir = "book"
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
+[output.html]
+git-repository-url = "https://github.com/jhnnr/selfhost.md"
+edit-url-template = "https://github.com/jhnnr/selfhost.md/edit/main/docs/{path}"
+site-url = "/selfhost.md/"
+default-theme = "navy"
+preferred-dark-theme = "navy"
+additional-js = ["mermaid.min.js", "mermaid-init.js"]

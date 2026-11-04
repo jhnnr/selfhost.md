@@ -41,6 +41,10 @@ temp/
 scratch/
 *.log
 
+# mdBook Build Artifacts
+book/
+*.swp
+
 # Node & VitePress
 node_modules/
 docs/.vitepress/dist/

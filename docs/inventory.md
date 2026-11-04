@@ -1,4 +1,4 @@
-# Homelab Inventory & Registry <img src="/assets/icons/table.svg" width="20" height="20" alt="Inventory" style="vertical-align: middle;" />
+# Homelab Inventory & Registry <img src="assets/icons/table.svg" width="20" height="20" alt="Inventory" style="vertical-align: middle;" />
 
 This file is the **Single Source of Truth** for IP addresses, Container/VM IDs, port allocations, databases, and storage mounts.
 All modifications to the homelab infrastructure **must** be recorded here to prevent collisions.

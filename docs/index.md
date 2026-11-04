@@ -1,31 +1,18 @@
+# Selfhost.md — Homelab Documentation & Architecture
+
+Welcome to the central documentation portal for my personal homelab infrastructure. This site serves as the **Single Source of Truth (SSoT)** for hypervisors, network segmentation, LXC containers, Docker services, cloud storage mounts, and media automation pipelines.
+
 ---
-layout: home
 
-hero:
-  name: selfhost.md
-  text: Homelab Infrastructure & Docs
-  tagline: Single Source of Truth for Hypervisors, Networks, Storage & Automation
-  actions:
-    - theme: brand
-      text: Infrastructure Map
-      link: /infrastructure-map
-    - theme: alt
-      text: Inventory & Registry
-      link: /inventory
+## Quick Navigation
 
-features:
-  - icon:
-      src: /assets/icons/server.svg
-    title: Proxmox VE & LXC Containers
-    details: Isolated vmbr1 bridge (10.10.0.0/24), host SMB fstab integration, and high-performance LXC bind mounts.
-  - icon:
-      src: /assets/icons/shield.svg
-    title: Zero-Trust Ingress & DNS
-    details: Cloudflare Tunnels for portless external access, AdGuard Home for local DNS rewrites and DHCP.
-  - icon:
-      src: /assets/icons/storage.svg
-    title: Unified Cloud Storage
-    details: Rclone FUSE (GDrive) and TAS (Telegram as Storage) mounted locally and shared via Samba.
+| Section | Description | Link |
+| :--- | :--- | :--- |
+| <img src="assets/icons/network.svg" width="18" height="18" alt="Network" style="vertical-align: middle;" /> **Infrastructure Map** | Topology diagrams, network bridges, and container layout | [View Map](infrastructure-map.md) |
+| <img src="assets/icons/table.svg" width="18" height="18" alt="Table" style="vertical-align: middle;" /> **Inventory & Registry** | Central registry for IPs, Container IDs, exposed ports, and databases | [View Inventory](inventory.md) |
+| <img src="assets/icons/storage.svg" width="18" height="18" alt="Storage" style="vertical-align: middle;" /> **Storage Architecture** | Multi-tier pipeline: GDrive, TAS, Rclone FUSE, SMB, and Bind Mounts | [View Pipeline](storage/architecture.md) |
+| <img src="assets/icons/cloud.svg" width="18" height="18" alt="Cloud" style="vertical-align: middle;" /> **Network & Routing** | Subnet isolation, AdGuard DNS/DHCP, Cloudflare Tunnels, and VPN mesh | [View Network](network/topology.md) |
+
 ---
 
 ## Node Overview

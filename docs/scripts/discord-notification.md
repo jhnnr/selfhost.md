@@ -1,4 +1,4 @@
-# qBittorrent Discord Notification & Plex Refresh Script <img src="/assets/icons/bell.svg" width="20" height="20" alt="Notification" style="vertical-align: middle;" />
+# qBittorrent Discord Notification & Plex Refresh Script <img src="../assets/icons/bell.svg" width="20" height="20" alt="Notification" style="vertical-align: middle;" />
 
 This document provides the reference implementation and configuration guide for `/root/.config/qBittorrent/discord_qbit_notification.sh` running on **CT 105 (`qbit.lan`)**.
 

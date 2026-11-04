@@ -1,4 +1,4 @@
-# CT 105: `qbit.lan` (qBittorrent Downloader) <img src="/assets/icons/download.svg" width="20" height="20" alt="Download" style="vertical-align: middle;" />
+# CT 105: `qbit.lan` (qBittorrent Downloader) <img src="../assets/icons/download.svg" width="20" height="20" alt="Download" style="vertical-align: middle;" />
 
 This document details the configuration, storage bindings, API integrations, and notification hooks for the dedicated qBittorrent download client.
 

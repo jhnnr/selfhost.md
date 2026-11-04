@@ -1,4 +1,4 @@
-# Sonarr Post-Import Relocation Hook <img src="/assets/icons/terminal.svg" width="20" height="20" alt="Script" style="vertical-align: middle;" />
+# Sonarr Post-Import Relocation Hook <img src="../assets/icons/terminal.svg" width="20" height="20" alt="Script" style="vertical-align: middle;" />
 
 This document details `/root/scripts/qbit-relocate.sh`, which is invoked on **Sonarr** after downloading and importing TV episodes.
 

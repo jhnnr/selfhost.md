@@ -1,4 +1,4 @@
-# Network Architecture & Topology <img src="/assets/icons/network.svg" width="20" height="20" alt="Network" style="vertical-align: middle;" />
+# Network Architecture & Topology <img src="../assets/icons/network.svg" width="20" height="20" alt="Network" style="vertical-align: middle;" />
 
 This document details the IP addressing, routing tables, DNS resolution, DHCP scopes, and ingress mechanisms across the homelab network.
 

@@ -148,23 +148,17 @@ When documenting a new LXC container, VM, or Docker Service, use the following s
 
 ---
 
-## 5. Development, VitePress & Validation Commands
+## 5. Development, mdBook & Validation Commands
 
-This repository uses **VitePress** (`vitepress` + `vitepress-plugin-mermaid`) to compile documentation into a blazing-fast, responsive static site automatically deployed to **GitHub Pages** via GitHub Actions.
+This repository uses **mdBook** with the `mdbook-mermaid` preprocessor to compile documentation into a fast, responsive static book automatically deployed to **GitHub Pages** via GitHub Actions.
 
 ### Local Development
 ```bash
-# Install dependencies
-npm install
+# Start local live-reloading preview server (default: http://localhost:3000)
+mdbook serve
 
-# Start local hot-reloading development server
-npm run docs:dev
-
-# Validate full production build
-npm run docs:build
-
-# Preview built production site locally
-npm run docs:preview
+# Validate full production build (outputs to book/)
+mdbook build
 ```
 
 ### GitHub Pages Setup
