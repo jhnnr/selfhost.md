@@ -40,3 +40,12 @@ tmp/
 temp/
 scratch/
 *.log
+
+# MkDocs & Python
+site/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+

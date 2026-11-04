@@ -140,9 +140,24 @@ When documenting a new LXC container, VM, or Docker Service, use the following s
 
 ---
 
-## 5. Development & Linting Commands
+## 5. Development, MkDocs & Validation Commands
 
-When checking or maintaining this repository:
-- Use standard markdown formatting (GitHub Flavored Markdown).
-- Keep relative links functional and validated across directories.
-- Run markdown linters if installed (`npx markdownlint-cli **/*.md` or Prettier).
+This repository uses **MkDocs Material** (`mkdocs-material`) to compile documentation into a searchable, responsive static site automatically deployed to **GitHub Pages** via GitHub Actions.
+
+### Local Development
+```bash
+# Install dependencies
+python -m pip install -r requirements.txt
+
+# Start local hot-reloading preview server (default: http://127.0.0.1:8000)
+python -m mkdocs serve
+
+# Validate full build and verify all internal links in strict mode
+python -m mkdocs build --strict
+```
+
+### GitHub Pages Setup
+- The repository uses `.github/workflows/deploy.yml` with native GitHub Pages deployment.
+- In repository **Settings** ➔ **Pages**:
+  - **Source:** Select **GitHub Actions**.
+  - Pushes to `main` will automatically build and publish the site.

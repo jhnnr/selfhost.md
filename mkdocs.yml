@@ -1,0 +1,85 @@
+site_name: selfhost.md
+site_description: Homelab Infrastructure & Selfhosting Documentation
+site_author: John
+site_url: https://johnny.github.io/selfhost.md/
+repo_name: selfhost.md
+repo_url: https://github.com/johnny/selfhost.md
+
+theme:
+  name: material
+  language: en
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path: ["."]
+      check_paths: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - tables
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Architecture:
+    - Infrastructure Map: infrastructure-map.md
+    - Inventory & Registry: inventory.md
+    - Storage Pipeline: storage/architecture.md
+  - Network:
+    - Topology & Subnets: network/topology.md
+  - Compute & Nodes:
+    - Proxmox Host (pve01): nodes/pve01.md
+    - qBittorrent (CT 105): containers/ct105-qbit.md
+  - Automation & Scripts:
+    - Discord Notification Hook: scripts/discord-notification.md
+    - qBittorrent Relocate Hook: scripts/qbit-relocate.md
+  - Governance & Rules:
+    - Agent Operating Instructions: standards/agents.md
+    - Gemini Project Guidelines: standards/gemini.md

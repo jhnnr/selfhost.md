@@ -77,10 +77,15 @@ Understand the multi-tier storage architecture before suggesting or documenting 
 
 ### Rule 5: Cross-Reference & Link Consistency
 - When adding a service (e.g. `docs/services/new-app.md`), always cross-link it from:
-  - `README.md`
+  - `README.md` and `docs/index.md`
   - `docs/infrastructure-map.md`
   - `docs/inventory.md`
   - Any upstream dependency (e.g., `postgresql.lan`, `adguard.lan`, `cloudflared.lan`).
+
+### Rule 6: MkDocs Build Integrity
+- All documentation files in `docs/` must compile cleanly with MkDocs Material.
+- When adding new markdown pages, add them to the navigation tree in `mkdocs.yml`.
+- Always validate documentation changes by running `python -m mkdocs build --strict`.
 
 ---
 

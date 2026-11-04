@@ -36,7 +36,7 @@ qBittorrent is configured to execute a notification and library scanning script 
 
 ### Hook Location & Configuration
 - **Script Path:** `/root/.config/qBittorrent/discord_qbit_notification.sh`
-- **Repository Template:** [`scripts/discord_qbit_notification.sh`](../../scripts/discord_qbit_notification.sh)
+- **Documentation & Template:** [`docs/scripts/discord-notification.md`](../scripts/discord-notification.md)
 - **qBittorrent GUI Setting:**
   *Options* ➔ *Downloads* ➔ Check **"Run external program on torrent completion"**:
   ```bash
