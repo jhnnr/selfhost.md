@@ -1,0 +1,42 @@
+# Environment & Secrets (NEVER commit actual secrets)
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.crt
+*.pfx
+*.p12
+*.kdbx
+*.secret
+*.token
+credentials.json
+tokens.json
+rclone.conf
+id_rsa*
+id_ed25519*
+
+# Backups & Database Dumps
+*.sql
+*.sql.gz
+*.dump
+*.bak
+*.tar
+*.tar.gz
+*.zip
+*.7z
+
+# OS & Editor Files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*~
+
+# Temporary / Scratch files
+tmp/
+temp/
+scratch/
+*.log
