@@ -1,4 +1,4 @@
-# 🌐 Network Architecture & Topology
+# Network Architecture & Topology <img src="../assets/icons/network.svg" width="20" height="20" alt="Network" style="vertical-align: middle;" />
 
 This document details the IP addressing, routing tables, DNS resolution, DHCP scopes, and ingress mechanisms across the homelab network.
 
@@ -41,15 +41,15 @@ This document details the IP addressing, routing tables, DNS resolution, DHCP sc
 - **DHCP Pool:** Handled by AdGuard Home for all dynamically addressed LXCs and VMs on `vmbr1` (`10.10.0.0/24`).
 - **Local Domain:** `.lan`
 - **DNS Rewrites / Records:**
-  - `adguard.lan` ➔ `10.10.0.2`
-  - `cloudflared.lan` ➔ `10.10.0.3`
-  - `docker.lan` ➔ DHCP reservation
-  - `rclone.lan` ➔ DHCP reservation
-  - `plex.lan` ➔ DHCP reservation
-  - `qbit.lan` ➔ DHCP reservation
-  - `postgresql.lan` ➔ DHCP reservation
-  - `sonarr.lan` ➔ DHCP reservation
-  - `seer.lan` ➔ DHCP reservation
+  - `adguard.lan` -> `10.10.0.2`
+  - `cloudflared.lan` -> `10.10.0.3`
+  - `docker.lan` -> DHCP reservation
+  - `rclone.lan` -> DHCP reservation
+  - `plex.lan` -> DHCP reservation
+  - `qbit.lan` -> DHCP reservation
+  - `postgresql.lan` -> DHCP reservation
+  - `sonarr.lan` -> DHCP reservation
+  - `seer.lan` -> DHCP reservation
 
 ---
 

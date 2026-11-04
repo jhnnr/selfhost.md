@@ -1,35 +1,36 @@
-# 💾 Homelab Storage Architecture & Pipelines
+# Homelab Storage Architecture & Pipelines <img src="../assets/icons/storage.svg" width="20" height="20" alt="Storage" style="vertical-align: middle;" />
 
 This document details the multi-layered storage architecture connecting Cloud storage, Telegram as Storage (TAS), local Proxmox VE host mounts, and LXC containers.
 
 ---
 
-## 🗺️ Storage Pipeline Overview
+## Storage Pipeline Overview
 
 ```text
 [ Cloud Providers ]
-  ├── Google Drive (Remote: plex)
-  └── Telegram Bot API (TAS)
-         │
-         │  (rclone FUSE & TAS FUSE mounts)
-         ▼
+  |-- Google Drive (Remote: plex)
+  +-- Telegram Bot API (TAS)
+         |
+         |  (rclone FUSE & TAS FUSE mounts)
+         v
 [ CT 103: rclone.lan ]
-  ├── /mnt/gdrive/plex   (Mounted via rclone-gdrive.service)
-  ├── /mnt/tas           (Mounted via tas-mount.service & tas-sync.service)
-  └── Samba Server       (Exports //rclone.lan/gdrive)
-         │
-         │  (Network SMB Share)
-         ▼
+  |-- /mnt/gdrive/plex   (Mounted via rclone-gdrive.service)
+  |-- /mnt/tas           (Mounted via tas-mount.service & tas-sync.service)
+  +-- Samba Server       (Exports //rclone.lan/gdrive)
+         |
+         |  (Network SMB Share)
+         v
 [ Proxmox Host: pve01 ]
-  └── /mnt/pve/smb-rclone.lan/Media (Mounted via /etc/fstab)
-         │
-         │  (LXC Bind Mounts via mp0)
-         ├────────────────────────────────────────┐
-         ▼                                        ▼
+  +-- /mnt/pve/smb-rclone.lan/Media (Mounted via /etc/fstab)
+         |
+         |  (LXC Bind Mounts via mp0)
+         +----------------------------------------+
+         |                                        |
+         v                                        v
 [ CT 104: plex.lan ]                    [ CT 105: qbit.lan ]
-  └── /mnt/media                          └── /mnt/media
-        ├── Movies (Section ID 2)               └── /downloads/tv-sonarr
-        └── TV (Section ID 3)
+  +-- /mnt/media                          +-- /mnt/media
+        |-- Movies (Section ID 2)               +-- /downloads/tv-sonarr
+        +-- TV (Section ID 3)
 ```
 
 ---

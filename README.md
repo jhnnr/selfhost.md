@@ -1,20 +1,19 @@
-# 🏠 Selfhost.md — Homelab Documentation & Architecture
+# Selfhost.md — Homelab Documentation & Architecture
 
 Welcome to the central documentation repository for my personal homelab infrastructure. This repository documents hypervisors, network topology, LXC containers, Docker services, cloud storage mounts, and media automation pipelines.
 
 ---
 
-## ⚡ Quick Links & Navigation
+## Quick Links & Navigation
 
 - **[Infrastructure Map & Topology](docs/infrastructure-map.md):** Complete visual architecture, ASCII diagram, and node descriptions.
 - **[IP & Port Inventory](docs/inventory.md):** Central registry of all IPs, Container IDs, port assignments, and databases.
 - **[Storage Architecture](docs/storage/architecture.md):** Google Drive, Telegram as Storage (TAS), Rclone FUSE, SMB, and Bind Mounts.
-- **[Agent Operating Instructions (AGENTS.md)](AGENTS.md):** Universal guidelines for AI assistants interacting with this repo.
-- **[Project Guidelines (GEMINI.md)](GEMINI.md):** Conventions, structure, and standards for Gemini CLI.
+- **Documentation Website:** [https://jhnnr.github.io/selfhost.md/](https://jhnnr.github.io/selfhost.md/)
 
 ---
 
-## 🖥️ Node Overview
+## Node Overview
 
 | Node | ID / Hostname | Type | IP Address | Primary Roles |
 | :--- | :--- | :--- | :--- | :--- |
@@ -32,7 +31,7 @@ Welcome to the central documentation repository for my personal homelab infrastr
 
 ---
 
-## 🌐 Network at a Glance
+## Network at a Glance
 
 - **Home Subnet:** `192.168.100.0/24` (ISP Router `192.168.100.1` has static route `10.10.0.0/24` via `192.168.100.2`).
 - **Homelab Subnet:** `10.10.0.0/24` on Proxmox bridge `vmbr1` (Gateway `10.10.0.1`).
@@ -41,8 +40,8 @@ Welcome to the central documentation repository for my personal homelab infrastr
 
 ---
 
-## 🔒 Security & Git Hygiene
+## Security & Git Hygiene
 
 - This repository adheres to a **Zero Secrets Policy**.
-- All passwords, private keys, tokens, and authorization headers are scrubbed and replaced with `<PLACEHOLDER>` tags.
+- All passwords, private keys, tokens, and authorization headers are scrubbed and replaced with standardized placeholder tags (e.g. `<TOKEN>`).
 - See `.gitignore` for excluded extensions and files.

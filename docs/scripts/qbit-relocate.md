@@ -1,10 +1,10 @@
-# 📦 Sonarr Post-Import Relocation Hook
+# Sonarr Post-Import Relocation Hook <img src="../assets/icons/terminal.svg" width="20" height="20" alt="Script" style="vertical-align: middle;" />
 
 This document details `/root/scripts/qbit-relocate.sh`, which is invoked on **Sonarr** after downloading and importing TV episodes.
 
 ---
 
-## 📋 Overview
+## Overview
 
 When Sonarr finishes importing an episode into the main library directory (`/mnt/media/TV`):
 1. Executes `/root/scripts/qbit-relocate.sh`.
@@ -14,18 +14,18 @@ When Sonarr finishes importing an episode into the main library directory (`/mnt
 
 ---
 
-## ⚙️ Sonarr Setup
+## Sonarr Setup
 
-1. In Sonarr, navigate to **Settings** ➔ **Connect**.
+1. In Sonarr, navigate to **Settings** -> **Connect**.
 2. Add a **Custom Script** connection.
 3. Path: `/root/scripts/qbit-relocate.sh`.
 4. Trigger on: **On Download**, **On Upgrade**, **On Rename**.
 
 ---
 
-## 📜 Script Template
+## Script Template
 
-```bash title="/root/scripts/qbit-relocate.sh"
+```bash
 --8<-- "scripts/qbit-relocate.sh.example"
 ```
-*(Reference template stored in [`scripts/qbit-relocate.sh.example`](https://github.com/johnny/selfhost.md/blob/main/scripts/qbit-relocate.sh.example))*
+*(Reference template stored in [`scripts/qbit-relocate.sh.example`](https://github.com/jhnnr/selfhost.md/blob/main/scripts/qbit-relocate.sh.example))*

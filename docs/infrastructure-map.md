@@ -1,76 +1,77 @@
-# 🖥️ Homelab Infrastructure Map
+# Homelab Infrastructure Map
 
 This document serves as the high-level architecture overview and network topology map for the homelab environment hosted on Proxmox VE.
 
 ---
 
-## 🗺️ Visual Architecture & Network Topology
+## Visual Architecture & Network Topology
 
 ### ASCII Topology Diagram
 
 ```text
 [ Public Internet / Mobile Data ]
-             │
- ┌───────────┴───────────┐
- ▼                       ▼
+             |
+ +-----------+-----------+
+ |                       |
+ v                       v
 [ Home ISP Router ]   [ Cloudflare Edge / Mesh ]
 (br0: 192.168.100.1/24) (Mesh 100.96.0.0/12)
 Static Route: 10.10.0.0/24
 via 192.168.100.2
- ┌───────────┴───────────┐
- │                       │
- │                       ▼
- │             ┌─────────────────────────┐
- │             │ [ openvpn-oracle VPS ]  │
- │             │ (Cloud Mesh Node)       │
- │             └────────────┬────────────┘
- │                          │
- ▼                          ▼
-┌────────────────────────────────────────┐
-│ Proxmox Host (pve01)                   │
-│ vmbr0: 192.168.100.2                   │
-│ vmbr1: 10.10.0.1 (GW)                  │
-└───────────────────┬────────────────────┘
-                    │
-════════════════════╪════════════════════════════════════════ vmbr1
-10.10.0.0/24 Subnet │ (DHCP & DNS via 10.10.0.2)
-════════════════════╪════════════════════════════════════════
-                    │
-                    ▼
-├──► [CT 101] cloudflared (10.10.0.3 / cloudflared.lan)
-│    └─ Forwards DoH & Tunnel traffic to 10.10.0.0/24
-│
-├──► [CT 100] adguard (10.10.0.2 / adguard.home.server)
-│    └─ Primary DNS (:53), DHCP Server, Web UI (:3000)
-│
-├──► [VM 102] docker (DHCP / docker.lan) [16GB RAM]
-│    ├─ OpenKOS Suite ───────────────────► [Uses CT 106]
-│    │  ├── openkos-web-1 (:8181 -> :8080)
-│    │  ├── openkos-queue-1 & openkos-scheduler-1
-│    │  ├── openkos-redis-1 (:6379)
-│    │  └── openkos-mailpit-1 (:8025 / :1025)
-│    ├─ Firefly III Suite ───────────────► [Uses CT 106]
-│    │  ├── firefly_iii_core (:800 -> :8080)
-│    │  ├── firefly_iii_importer (:810 -> :8080)
-│    │  └── firefly_iii_cron
-│    ├─ Privacy-First PDF
-│    │  └── podpdf (:2873 -> :8080)
-│    ├─ Gaming & Administration
-│    │  ├── steam-ish (:3112 -> :3000)
-│    │  └── portainer (:9443 / :8000)
-│    └─ System Management
-│
-├──► [CT 106] postgresql (DHCP / postgresql.lan)
-│    └─ Shared PostgreSQL (:5432) & Adminer (:80/adminer)
-│
-├──► [CT 103] rclone (DHCP / rclone.lan)
-│    └─ Rclone FUSE (gdrive:plex) + Samba Server (//rclone.lan/gdrive)
-│
-├──► [CT 104] plex (DHCP / plex.lan)
-│    └─ Bind Mount: /mnt/media ◄── Host SMB (/mnt/pve/smb-rclone.lan/Media)
-│
-└──► [CT 105] qbit (DHCP / qbit.lan)
-     └─ Bind Mount: /mnt/media ◄── Host SMB (/mnt/pve/smb-rclone.lan/Media)
+ +-----------+-----------+
+ |                       |
+ |                       v
+ |             +-------------------------+
+ |             | [ openvpn-oracle VPS ]  |
+ |             | (Cloud Mesh Node)       |
+ |             +------------+------------+
+ |                          |
+ v                          v
++----------------------------------------+
+| Proxmox Host (pve01)                   |
+| vmbr0: 192.168.100.2                   |
+| vmbr1: 10.10.0.1 (GW)                  |
++-------------------+--------------------+
+                    |
+====================+======================================== vmbr1
+10.10.0.0/24 Subnet | (DHCP & DNS via 10.10.0.2)
+====================+========================================
+                    |
+                    v
++--> [CT 101] cloudflared (10.10.0.3 / cloudflared.lan)
+|    |-- Forwards DoH & Tunnel traffic to 10.10.0.0/24
+|
++--> [CT 100] adguard (10.10.0.2 / adguard.home.server)
+|    |-- Primary DNS (:53), DHCP Server, Web UI (:3000)
+|
++--> [VM 102] docker (DHCP / docker.lan) [16GB RAM]
+|    |-- OpenKOS Suite -------------------> [Uses CT 106]
+|    |   |-- openkos-web-1 (:8181 -> :8080)
+|    |   |-- openkos-queue-1 & openkos-scheduler-1
+|    |   |-- openkos-redis-1 (:6379)
+|    |   +-- openkos-mailpit-1 (:8025 / :1025)
+|    |-- Firefly III Suite ---------------> [Uses CT 106]
+|    |   |-- firefly_iii_core (:800 -> :8080)
+|    |   |-- firefly_iii_importer (:810 -> :8080)
+|    |   +-- firefly_iii_cron
+|    |-- Privacy-First PDF
+|    |   +-- podpdf (:2873 -> :8080)
+|    |-- Gaming & Administration
+|    |   |-- steam-ish (:3112 -> :3000)
+|    |   +-- portainer (:9443 / :8000)
+|    +-- System Management
+|
++--> [CT 106] postgresql (DHCP / postgresql.lan)
+|    +-- Shared PostgreSQL (:5432) & Adminer (:80/adminer)
+|
++--> [CT 103] rclone (DHCP / rclone.lan)
+|    +-- Rclone FUSE (gdrive:plex) + Samba Server (//rclone.lan/gdrive)
+|
++--> [CT 104] plex (DHCP / plex.lan)
+|    +-- Bind Mount: /mnt/media <--- Host SMB (/mnt/pve/smb-rclone.lan/Media)
+|
++--> [CT 105] qbit (DHCP / qbit.lan)
+     +-- Bind Mount: /mnt/media <--- Host SMB (/mnt/pve/smb-rclone.lan/Media)
 ```
 
 ### Mermaid Architecture Diagram
@@ -133,9 +134,9 @@ graph TD
 
 ---
 
-## 📦 Node Details & Responsibilities
+## Node Details & Responsibilities
 
-### 1. `pve01` (Proxmox VE Host)
+### 1. `pve01` (Proxmox VE Host) <img src="assets/icons/server.svg" width="18" height="18" alt="Server" style="vertical-align: middle;" />
 - **Role:** Bare-metal hypervisor host running Proxmox VE.
 - **Network Interfaces:**
   - `vmbr0`: Bridged to physical LAN (`192.168.100.2/24`).
@@ -146,7 +147,7 @@ graph TD
 
 ---
 
-### 2. 🛡️ `adguard.lan` (CT 100)
+### 2. `adguard.lan` (CT 100) <img src="assets/icons/shield.svg" width="18" height="18" alt="Shield" style="vertical-align: middle;" />
 - **Role:** Primary local DNS server, DHCP daemon, and ad-blocking gateway.
 - **IP:** `10.10.0.2` (Static)
 - **Services & Ports:**
@@ -156,14 +157,14 @@ graph TD
 
 ---
 
-### 3. ☁️ `cloudflared.lan` (CT 101)
+### 3. `cloudflared.lan` (CT 101) <img src="assets/icons/cloud.svg" width="18" height="18" alt="Cloud" style="vertical-align: middle;" />
 - **Role:** Cloudflare Zero-Trust Tunnel gateway providing secure external ingress to internal homelab services without opening inbound firewall ports on the ISP router.
 - **IP:** `10.10.0.3` (Static)
 - **Features:** Forwards DNS-over-HTTPS (DoH) and tunnel traffic to the `10.10.0.0/24` network.
 
 ---
 
-### 4. 🔄 `rclone.lan` (CT 103)
+### 4. `rclone.lan` (CT 103) <img src="assets/icons/storage.svg" width="18" height="18" alt="Storage" style="vertical-align: middle;" />
 - **Role:** Manages cloud storage synchronization and mounting (Google Drive & Telegram as Storage - TAS) and triggers automated library scanning when files change.
 - **Systemd Services:**
   - `/etc/systemd/system/plex-watcher.service` — Daemon process managing automatic starts and stops for the watcher script.
@@ -178,53 +179,53 @@ graph TD
 
 ---
 
-### 5. 🎬 `plex.lan` (CT 104)
+### 5. `plex.lan` (CT 104) <img src="assets/icons/play.svg" width="18" height="18" alt="Play" style="vertical-align: middle;" />
 - **Role:** Media server running Plex Media Server.
 - **Port:** `32400`
 - **Storage Path:** `/mnt/media` (LXC bind mount from `pve01`'s `/mnt/pve/smb-rclone.lan/Media`).
 - **Plex Section IDs:**
-  - 🎥 **Movies:** Section ID `2`
-  - 📺 **TV Shows:** Section ID `3`
+  - **Movies:** Section ID `2`
+  - **TV Shows:** Section ID `3`
 
 ---
 
-### 6. 📺 `sonarr.lan` (LXC Container)
+### 6. `sonarr.lan` (LXC Container) <img src="assets/icons/tv.svg" width="18" height="18" alt="TV" style="vertical-align: middle;" />
 - **Role:** Smart TV episode automation daemon. Tracks, grabs, and manages library importing for TV shows.
 - **Port:** `8989`
 - **Mounts / Paths:**
   - `/mnt/media/TV` — Directory for the final local TV library.
 - **Integrations & Hooks:**
-  - 🔌 **Download Client:** Connects to `qbit.lan:8090` using a native Bearer Token API Key.
-  - ⚙️ **Custom Post-Import Script:** Executes `/root/scripts/qbit-relocate.sh` on download/import events to rename/relocate files in qBittorrent, cleanup local source duplicates, and resume seeding.
+  - **Download Client:** Connects to `qbit.lan:8090` using a native Bearer Token API Key.
+  - **Custom Post-Import Script:** Executes `/root/scripts/qbit-relocate.sh` on download/import events to rename/relocate files in qBittorrent, cleanup local source duplicates, and resume seeding.
 - **Key Settings:**
   - `Create Empty Series Folders` enabled to generate root show directories immediately on add.
 
 ---
 
-### 7. 🔍 `seer.lan` (LXC Container)
+### 7. `seer.lan` (LXC Container) <img src="assets/icons/search.svg" width="18" height="18" alt="Search" style="vertical-align: middle;" />
 - **Role:** Media request and discovery platform (Jellyseerr / Overseerr).
 - **Port:** `5055`
 - **Integrations:**
-  - 🔌 **Sonarr Connection:** Connects directly to `sonarr.lan` to push requested television shows into Sonarr's monitoring queue.
-  - 🔌 **Plex Connection:** Scrapes `plex.lan` to check file availability before approving user requests.
+  - **Sonarr Connection:** Connects directly to `sonarr.lan` to push requested television shows into Sonarr's monitoring queue.
+  - **Plex Connection:** Scrapes `plex.lan` to check file availability before approving user requests.
 
 ---
 
-### 8. 📥 `qbit.lan` (CT 105)
-- **Documentation:** [`docs/containers/ct105-qbit.md`](containers/ct105-qbit.md)
+### 8. `qbit.lan` (CT 105) <img src="assets/icons/download.svg" width="18" height="18" alt="Download" style="vertical-align: middle;" />
+- **Documentation:** [`containers/ct105-qbit.md`](containers/ct105-qbit.md)
 - **Role:** Torrent downloader handling television and movie file transfers.
 - **Port:** `8090`
 - **Storage:**
   - Bind mount: `/mnt/media`
   - Save path: `/downloads/tv-sonarr` — Designated target path for television files.
 - **Key Configurations:**
-  - 🔑 **WebAPI v2.14+ API Key Auth:** Generates bearer tokens for passwordless external scripts.
-  - 🛠️ **Path Mapping:** Remote path mappings translate `/downloads/tv-sonarr` to Sonarr's internal access path.
-  - 🔔 **Torrent Completion Hook:** Executes `/root/.config/qBittorrent/discord_qbit_notification.sh` to trigger direct Plex library scans (Movies ID 2, TV ID 3) and send rich Discord notifications for non-Arr downloads.
+  - **WebAPI v2.14+ API Key Auth:** Generates bearer tokens for passwordless external scripts.
+  - **Path Mapping:** Remote path mappings translate `/downloads/tv-sonarr` to Sonarr's internal access path.
+  - **Torrent Completion Hook:** Executes `/root/.config/qBittorrent/discord_qbit_notification.sh` to trigger direct Plex library scans (Movies ID 2, TV ID 3) and send rich Discord notifications for non-Arr downloads.
 
 ---
 
-### 9. 🐳 `docker.lan` (VM 102)
+### 9. `docker.lan` (VM 102) <img src="assets/icons/docker.svg" width="18" height="18" alt="Docker" style="vertical-align: middle;" />
 - **Role:** Dedicated Docker VM with 16GB RAM hosting multiple application stacks.
 - **Hosted Stacks:**
   - **OpenKOS Suite:** (Uses CT 106 PostgreSQL)
@@ -244,13 +245,13 @@ graph TD
 
 ---
 
-### 10. 🐘 `postgresql.lan` (CT 106)
+### 10. `postgresql.lan` (CT 106) <img src="assets/icons/database.svg" width="18" height="18" alt="Database" style="vertical-align: middle;" />
 - **Role:** Dedicated shared database server running PostgreSQL and Adminer.
 - **Default Port:** `5432`
 - **Adminer Port:** `80` (access at `http://postgresql.lan/adminer`)
 - **Hosted Databases:**
-  - 🗄️ `openkos` — Primary database for the OpenKOS platform.
-  - 🗄️ `firefly` — Primary database for the Firefly III Budgeting App.
+  - `openkos` — Primary database for the OpenKOS platform.
+  - `firefly` — Primary database for the Firefly III Budgeting App.
 - **Standard Administration Commands:**
   - Create new user:
     ```bash

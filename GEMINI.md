@@ -122,6 +122,14 @@ When documenting a new LXC container, VM, or Docker Service, use the following s
 ### D. Diagrams
 - Maintain both ASCII diagrams (for quick terminal/CLI reading) and Mermaid diagrams (for visual rendering in GitHub and markdown viewers) when modifying network routing or data flow.
 
+### E. Strictly No Emojis (Use SVGs)
+- Do NOT use emojis in documentation titles, headings, or content.
+- Use clean typography or vector SVGs located in `docs/assets/icons/` when visual iconography is required.
+
+### F. AI Guidelines Isolation
+- `AGENTS.md` and `GEMINI.md` are strictly for AI agent instructions and repository governance.
+- Never add `AGENTS.md` or `GEMINI.md` to `docs/` or expose them in the `mkdocs.yml` navigation tree.
+
 ---
 
 ## 4. Common Maintenance Workflows
@@ -142,7 +150,7 @@ When documenting a new LXC container, VM, or Docker Service, use the following s
 
 ## 5. Development, MkDocs & Validation Commands
 
-This repository uses **MkDocs Material** (`mkdocs-material`) to compile documentation into a searchable, responsive static site automatically deployed to **GitHub Pages** via GitHub Actions.
+This repository uses standard **MkDocs** (`theme: name: mkdocs`) to compile documentation into a searchable, responsive static site automatically deployed to **GitHub Pages** via GitHub Actions.
 
 ### Local Development
 ```bash
@@ -158,6 +166,6 @@ python -m mkdocs build --strict
 
 ### GitHub Pages Setup
 - The repository uses `.github/workflows/deploy.yml` with native GitHub Pages deployment.
-- In repository **Settings** ➔ **Pages**:
+- In repository **Settings** -> **Pages**:
   - **Source:** Select **GitHub Actions**.
   - Pushes to `main` will automatically build and publish the site.

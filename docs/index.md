@@ -1,42 +1,21 @@
-# 🏠 Selfhost.md — Homelab Documentation & Architecture
+# Selfhost.md — Homelab Documentation & Architecture
 
 Welcome to the central documentation portal for my personal homelab infrastructure. This site serves as the **Single Source of Truth (SSoT)** for hypervisors, network segmentation, LXC containers, Docker services, cloud storage mounts, and media automation pipelines.
 
 ---
 
-## ⚡ Quick Navigation
+## Quick Navigation
 
-<div class="grid cards" markdown>
-
--   :material-map: __[Infrastructure Map](infrastructure-map.md)__
-
-    ---
-
-    Complete topology diagrams, network bridges, and container breakdown.
-
--   :material-table: __[Inventory & Registry](inventory.md)__
-
-    ---
-
-    Single Source of Truth for IPs, Container IDs, exposed ports, and databases.
-
--   :material-database: __[Storage Architecture](storage/architecture.md)__
-
-    ---
-
-    Multi-tier pipeline: GDrive, TAS (Telegram as Storage), Rclone FUSE, SMB, and Bind Mounts.
-
--   :material-lan: __[Network & Routing](network/topology.md)__
-
-    ---
-
-    Subnet isolation, AdGuard DNS/DHCP, Cloudflare Zero-Trust Tunnels, and VPN mesh.
-
-</div>
+| Section | Description | Link |
+| :--- | :--- | :--- |
+| <img src="assets/icons/network.svg" width="18" height="18" alt="Network" style="vertical-align: middle;" /> **Infrastructure Map** | Topology diagrams, network bridges, and container layout | [View Map](infrastructure-map.md) |
+| <img src="assets/icons/table.svg" width="18" height="18" alt="Table" style="vertical-align: middle;" /> **Inventory & Registry** | Central registry for IPs, Container IDs, exposed ports, and databases | [View Inventory](inventory.md) |
+| <img src="assets/icons/storage.svg" width="18" height="18" alt="Storage" style="vertical-align: middle;" /> **Storage Architecture** | Multi-tier pipeline: GDrive, TAS, Rclone FUSE, SMB, and Bind Mounts | [View Pipeline](storage/architecture.md) |
+| <img src="assets/icons/cloud.svg" width="18" height="18" alt="Cloud" style="vertical-align: middle;" /> **Network & Routing** | Subnet isolation, AdGuard DNS/DHCP, Cloudflare Tunnels, and VPN mesh | [View Network](network/topology.md) |
 
 ---
 
-## 🖥️ Node Overview
+## Node Overview
 
 | Node | ID / Hostname | Type | IP Address | Primary Roles |
 | :--- | :--- | :--- | :--- | :--- |
@@ -54,7 +33,7 @@ Welcome to the central documentation portal for my personal homelab infrastructu
 
 ---
 
-## 🌐 Network at a Glance
+## Network at a Glance
 
 - **Home Subnet:** `192.168.100.0/24` (ISP Router `192.168.100.1` has static route `10.10.0.0/24` via `192.168.100.2`).
 - **Homelab Subnet:** `10.10.0.0/24` on Proxmox bridge `vmbr1` (Gateway `10.10.0.1`).
@@ -63,7 +42,7 @@ Welcome to the central documentation portal for my personal homelab infrastructu
 
 ---
 
-## 🔒 Security & Git Hygiene
+## Security & Git Hygiene
 
 - This repository adheres to a **Zero Secrets Policy**.
 - All passwords, private keys, tokens, and authorization headers are scrubbed and replaced with standardized placeholder tags (e.g. `<TOKEN>`).

@@ -1,4 +1,4 @@
-# 📥 CT 105: `qbit.lan` (qBittorrent Downloader)
+# CT 105: `qbit.lan` (qBittorrent Downloader) <img src="../assets/icons/download.svg" width="20" height="20" alt="Download" style="vertical-align: middle;" />
 
 This document details the configuration, storage bindings, API integrations, and notification hooks for the dedicated qBittorrent download client.
 
@@ -14,7 +14,7 @@ This document details the configuration, storage bindings, API integrations, and
 | **Network Bridge** | `vmbr1` (Homelab Subnet: `10.10.0.0/24`) |
 | **Web UI Port** | `8090` (HTTP) |
 | **Authentication** | WebAPI v2.14+ Bearer Token API Key Auth |
-| **Storage Bind Mount** | `/mnt/media` ◄── Proxmox host `/mnt/pve/smb-rclone.lan/Media` |
+| **Storage Bind Mount** | `/mnt/media` <-- Proxmox host `/mnt/pve/smb-rclone.lan/Media` |
 | **Default Download Root** | `/downloads/tv-sonarr` |
 
 ---
@@ -38,7 +38,7 @@ qBittorrent is configured to execute a notification and library scanning script 
 - **Script Path:** `/root/.config/qBittorrent/discord_qbit_notification.sh`
 - **Documentation & Template:** [`docs/scripts/discord-notification.md`](../scripts/discord-notification.md)
 - **qBittorrent GUI Setting:**
-  *Options* ➔ *Downloads* ➔ Check **"Run external program on torrent completion"**:
+  *Options* -> *Downloads* -> Check **"Run external program on torrent completion"**:
   ```bash
   /root/.config/qBittorrent/discord_qbit_notification.sh "%N" "%Z" "%F" "%T" "%L" "%R"
   ```
@@ -57,8 +57,8 @@ qBittorrent is configured to execute a notification and library scanning script 
 
 1. **Direct Plex Library Scans:**
    - Triggers Plex Media Server on `plex.lan:32400` using the Plex API token:
-     - Categories matching `tv`, `tv shows`, `tv-shows`, `television` ➔ Triggers **TV Shows** (Section ID `3`).
-     - Categories matching `movies`, `movie`, `4k movies`, `radarr`, `movies-radarr` ➔ Triggers **Movies** (Section ID `2`).
+     - Categories matching `tv`, `tv shows`, `tv-shows`, `television` -> Triggers **TV Shows** (Section ID `3`).
+     - Categories matching `movies`, `movie`, `4k movies`, `radarr`, `movies-radarr` -> Triggers **Movies** (Section ID `2`).
 2. **Discord Embed Notifications:**
    - Dispatches a formatted rich Discord embed webhook displaying torrent name, formatted size, tracker, file count, and destination directory.
 3. **Arr Deduplication (Smart Skip):**

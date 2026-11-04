@@ -1,4 +1,4 @@
-# 🖥️ Node Specification: `pve01` (Proxmox VE Host)
+# Node Specification: `pve01` (Proxmox VE Host) <img src="../assets/icons/server.svg" width="20" height="20" alt="Server" style="vertical-align: middle;" />
 
 This document covers the core hypervisor host `pve01` running Proxmox VE.
 

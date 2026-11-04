@@ -1,10 +1,10 @@
-# 🔔 qBittorrent Discord Notification & Plex Refresh Script
+# qBittorrent Discord Notification & Plex Refresh Script <img src="../assets/icons/bell.svg" width="20" height="20" alt="Notification" style="vertical-align: middle;" />
 
 This document provides the reference implementation and configuration guide for `/root/.config/qBittorrent/discord_qbit_notification.sh` running on **CT 105 (`qbit.lan`)**.
 
 ---
 
-## 📋 Overview
+## Overview
 
 The script triggers automatically upon torrent completion in qBittorrent:
 1. **Refreshes Plex Libraries:**
@@ -17,10 +17,10 @@ The script triggers automatically upon torrent completion in qBittorrent:
 
 ---
 
-## ⚙️ qBittorrent Configuration
+## qBittorrent Configuration
 
 In qBittorrent WebUI:
-1. Navigate to **Options** ➔ **Downloads**.
+1. Navigate to **Options** -> **Downloads**.
 2. Scroll down to **"Run external program"**.
 3. Enable **"Run on torrent finished"** and enter:
    ```bash
@@ -29,9 +29,9 @@ In qBittorrent WebUI:
 
 ---
 
-## 📜 Script Source Code
+## Script Source Code
 
-```bash title="/root/.config/qBittorrent/discord_qbit_notification.sh"
+```bash
 --8<-- "scripts/discord_qbit_notification.sh"
 ```
-*(Source code embedded directly from [`scripts/discord_qbit_notification.sh`](https://github.com/johnny/selfhost.md/blob/main/scripts/discord_qbit_notification.sh))*
+*(Source code embedded directly from [`scripts/discord_qbit_notification.sh`](https://github.com/jhnnr/selfhost.md/blob/main/scripts/discord_qbit_notification.sh))*

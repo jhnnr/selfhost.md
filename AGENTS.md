@@ -25,7 +25,7 @@ When analyzing user prompts or proposing changes, you MUST adhere to the existin
 | **CT 101** | LXC | `cloudflared.lan` | `10.10.0.3` (Static) | Cloudflare Tunnel daemon, DoH proxy | Cloudflare credentials & config |
 | **VM 102** | VM (16GB) | `docker.lan` | DHCP (`10.10.0.x`) | Docker stacks: OpenKOS, Firefly III, PodPDF, Steam-ish, Portainer | Docker volumes & mounts |
 | **CT 103** | LXC | `rclone.lan` | DHCP (`10.10.0.x`) | Rclone FUSE (gdrive, TAS), Samba (`//rclone.lan/gdrive`), `plex-watcher.service` | `/mnt/gdrive/plex`, `/mnt/tas` |
-| **CT 104** | LXC | `plex.lan` | DHCP (`10.10.0.x`) | Plex Media Server (`:32400`), Sections: Movies (2), TV (3) | Bind mount: `/mnt/media` ◄── Host SMB |
+| **CT 104** | LXC | `plex.lan` | DHCP (`10.10.0.x`) | Plex Media Server (`:32400`), Sections: Movies (2), TV (3) | Bind mount: `/mnt/media` <-- Host SMB |
 | **CT 105** | LXC | `qbit.lan` | DHCP (`10.10.0.x`) | qBittorrent WebUI (`:8090`), Bearer Token Auth | Bind mount: `/mnt/media`, `/downloads/tv-sonarr` |
 | **CT 106** | LXC | `postgresql.lan`| DHCP (`10.10.0.x`) | Shared PostgreSQL (`:5432`), Adminer (`:80/adminer`) | Databases: `openkos`, `firefly` |
 | **LXC** | LXC | `sonarr.lan` | DHCP (`10.10.0.x`) | TV show automation (`:8989`), Post-import relocate hook | `/mnt/media/TV` |
@@ -83,9 +83,17 @@ Understand the multi-tier storage architecture before suggesting or documenting 
   - Any upstream dependency (e.g., `postgresql.lan`, `adguard.lan`, `cloudflared.lan`).
 
 ### Rule 6: MkDocs Build Integrity
-- All documentation files in `docs/` must compile cleanly with MkDocs Material.
+- All documentation files in `docs/` must compile cleanly with standard MkDocs (`theme: name: mkdocs`).
 - When adding new markdown pages, add them to the navigation tree in `mkdocs.yml`.
 - Always validate documentation changes by running `python -m mkdocs build --strict`.
+
+### Rule 7: Strictly No Emojis (Use SVGs)
+- Do NOT use emojis in documentation titles, headings, or content.
+- Use clean typography or vector SVGs located in `docs/assets/icons/` when visual iconography is required.
+
+### Rule 8: AI Guidelines Isolation
+- `AGENTS.md` and `GEMINI.md` are strictly for AI agent instructions and repository governance.
+- Never add `AGENTS.md` or `GEMINI.md` to `docs/` or expose them in the `mkdocs.yml` navigation tree.
 
 ---
 
