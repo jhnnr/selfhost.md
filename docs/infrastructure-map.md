@@ -211,6 +211,7 @@ graph TD
 ---
 
 ### 8. 📥 `qbit.lan` (CT 105)
+- **Documentation:** [`docs/containers/ct105-qbit.md`](containers/ct105-qbit.md)
 - **Role:** Torrent downloader handling television and movie file transfers.
 - **Port:** `8090`
 - **Storage:**
@@ -219,6 +220,7 @@ graph TD
 - **Key Configurations:**
   - 🔑 **WebAPI v2.14+ API Key Auth:** Generates bearer tokens for passwordless external scripts.
   - 🛠️ **Path Mapping:** Remote path mappings translate `/downloads/tv-sonarr` to Sonarr's internal access path.
+  - 🔔 **Torrent Completion Hook:** Executes `/root/.config/qBittorrent/discord_qbit_notification.sh` to trigger direct Plex library scans (Movies ID 2, TV ID 3) and send rich Discord notifications for non-Arr downloads.
 
 ---
 

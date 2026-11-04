@@ -24,7 +24,7 @@ Welcome to the central documentation repository for my personal homelab infrastr
 | **Docker Host**| `docker.lan` | VM 102 (16GB) | DHCP (`10.10.0.x`) | OpenKOS, Firefly III, PodPDF, Steam-ish, Portainer |
 | **Rclone** | `rclone.lan` | LXC (CT 103) | DHCP (`10.10.0.x`) | GDrive & Telegram (TAS) FUSE Mounts, Samba Server |
 | **Plex** | `plex.lan` | LXC (CT 104) | DHCP (`10.10.0.x`) | Plex Media Server (:32400) |
-| **qBittorrent**| `qbit.lan` | LXC (CT 105) | DHCP (`10.10.0.x`) | Torrent Downloader (:8090, API Key Auth) |
+| **qBittorrent**| [`qbit.lan`](docs/containers/ct105-qbit.md) | LXC (CT 105) | DHCP (`10.10.0.x`) | Torrent Downloader (:8090, API Key Auth) |
 | **PostgreSQL** | `postgresql.lan` | LXC (CT 106) | DHCP (`10.10.0.x`) | Central Database Server (:5432) & Adminer (:80/adminer) |
 | **Sonarr** | `sonarr.lan` | LXC | DHCP (`10.10.0.x`) | TV Automation (:8989), Relocate Script Hooks |
 | **Seer** | `seer.lan` | LXC | DHCP (`10.10.0.x`) | Jellyseerr / Overseerr Media Requests (:5055) |

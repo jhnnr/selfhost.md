@@ -88,7 +88,11 @@ mp0: /mnt/pve/smb-rclone.lan/Media,mp=/mnt/media
 1. **Discovery & Request:** User requests media on `seer.lan` (Jellyseerr).
 2. **TV Automation:** `seer.lan` passes request to `sonarr.lan`.
 3. **Grab & Download:** `sonarr.lan` instructs `qbit.lan:8090` (using Bearer Token) to grab release, saving to `/downloads/tv-sonarr`.
-4. **Post-Import Relocation Hook:**
+4. **Torrent Completion Hook (`discord_qbit_notification.sh`):**
+   - On completion, qBittorrent executes `/root/.config/qBittorrent/discord_qbit_notification.sh`.
+   - Directly triggers Plex refresh for Movies (Section 2) or TV (Section 3).
+   - Dispatches Discord embed notifications for non-Arr categories (skips `tv-sonarr`, `radarr` to prevent duplicate alerts).
+5. **Post-Import Relocation Hook (`qbit-relocate.sh`):**
    - When download completes, `sonarr.lan` invokes `/root/scripts/qbit-relocate.sh`.
    - The script renames/relocates the media to the final `/mnt/media/TV` directory, cleans up temporary local files, and triggers qBittorrent to update its seeding target without duplicate storage consumption.
-5. **Plex Library Update:** `plex-watcher.service` on `rclone.lan` or Sonarr's notification triggers Plex (`plex.lan`) to refresh TV Shows (Section `3`).
+6. **Plex Library Update:** `plex-watcher.service` on `rclone.lan` or Sonarr's notification triggers Plex (`plex.lan`) to refresh TV Shows (Section `3`).
