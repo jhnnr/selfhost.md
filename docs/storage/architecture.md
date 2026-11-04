@@ -1,4 +1,4 @@
-# Homelab Storage Architecture & Pipelines <img src="../assets/icons/storage.svg" width="20" height="20" alt="Storage" style="vertical-align: middle;" />
+# Homelab Storage Architecture & Pipelines <img src="/assets/icons/storage.svg" width="20" height="20" alt="Storage" style="vertical-align: middle;" />
 
 This document details the multi-layered storage architecture connecting Cloud storage, Telegram as Storage (TAS), local Proxmox VE host mounts, and LXC containers.
 

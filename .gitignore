@@ -41,11 +41,19 @@ temp/
 scratch/
 *.log
 
-# MkDocs & Python
+# Node & VitePress
+node_modules/
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+.vitepress/dist/
+.vitepress/cache/
+
+# Python & Other Build Artifacts
 site/
 __pycache__/
 *.py[cod]
 .venv/
 venv/
 env/
+
 

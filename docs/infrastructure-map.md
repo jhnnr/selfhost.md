@@ -136,7 +136,7 @@ graph TD
 
 ## Node Details & Responsibilities
 
-### 1. `pve01` (Proxmox VE Host) <img src="assets/icons/server.svg" width="18" height="18" alt="Server" style="vertical-align: middle;" />
+### 1. `pve01` (Proxmox VE Host) <img src="/assets/icons/server.svg" width="18" height="18" alt="Server" style="vertical-align: middle;" />
 - **Role:** Bare-metal hypervisor host running Proxmox VE.
 - **Network Interfaces:**
   - `vmbr0`: Bridged to physical LAN (`192.168.100.2/24`).
@@ -147,7 +147,7 @@ graph TD
 
 ---
 
-### 2. `adguard.lan` (CT 100) <img src="assets/icons/shield.svg" width="18" height="18" alt="Shield" style="vertical-align: middle;" />
+### 2. `adguard.lan` (CT 100) <img src="/assets/icons/shield.svg" width="18" height="18" alt="Shield" style="vertical-align: middle;" />
 - **Role:** Primary local DNS server, DHCP daemon, and ad-blocking gateway.
 - **IP:** `10.10.0.2` (Static)
 - **Services & Ports:**
@@ -157,14 +157,14 @@ graph TD
 
 ---
 
-### 3. `cloudflared.lan` (CT 101) <img src="assets/icons/cloud.svg" width="18" height="18" alt="Cloud" style="vertical-align: middle;" />
+### 3. `cloudflared.lan` (CT 101) <img src="/assets/icons/cloud.svg" width="18" height="18" alt="Cloud" style="vertical-align: middle;" />
 - **Role:** Cloudflare Zero-Trust Tunnel gateway providing secure external ingress to internal homelab services without opening inbound firewall ports on the ISP router.
 - **IP:** `10.10.0.3` (Static)
 - **Features:** Forwards DNS-over-HTTPS (DoH) and tunnel traffic to the `10.10.0.0/24` network.
 
 ---
 
-### 4. `rclone.lan` (CT 103) <img src="assets/icons/storage.svg" width="18" height="18" alt="Storage" style="vertical-align: middle;" />
+### 4. `rclone.lan` (CT 103) <img src="/assets/icons/storage.svg" width="18" height="18" alt="Storage" style="vertical-align: middle;" />
 - **Role:** Manages cloud storage synchronization and mounting (Google Drive & Telegram as Storage - TAS) and triggers automated library scanning when files change.
 - **Systemd Services:**
   - `/etc/systemd/system/plex-watcher.service` — Daemon process managing automatic starts and stops for the watcher script.
@@ -179,7 +179,7 @@ graph TD
 
 ---
 
-### 5. `plex.lan` (CT 104) <img src="assets/icons/play.svg" width="18" height="18" alt="Play" style="vertical-align: middle;" />
+### 5. `plex.lan` (CT 104) <img src="/assets/icons/play.svg" width="18" height="18" alt="Play" style="vertical-align: middle;" />
 - **Role:** Media server running Plex Media Server.
 - **Port:** `32400`
 - **Storage Path:** `/mnt/media` (LXC bind mount from `pve01`'s `/mnt/pve/smb-rclone.lan/Media`).
@@ -189,7 +189,7 @@ graph TD
 
 ---
 
-### 6. `sonarr.lan` (LXC Container) <img src="assets/icons/tv.svg" width="18" height="18" alt="TV" style="vertical-align: middle;" />
+### 6. `sonarr.lan` (LXC Container) <img src="/assets/icons/tv.svg" width="18" height="18" alt="TV" style="vertical-align: middle;" />
 - **Role:** Smart TV episode automation daemon. Tracks, grabs, and manages library importing for TV shows.
 - **Port:** `8989`
 - **Mounts / Paths:**
@@ -202,7 +202,7 @@ graph TD
 
 ---
 
-### 7. `seer.lan` (LXC Container) <img src="assets/icons/search.svg" width="18" height="18" alt="Search" style="vertical-align: middle;" />
+### 7. `seer.lan` (LXC Container) <img src="/assets/icons/search.svg" width="18" height="18" alt="Search" style="vertical-align: middle;" />
 - **Role:** Media request and discovery platform (Jellyseerr / Overseerr).
 - **Port:** `5055`
 - **Integrations:**
@@ -211,7 +211,7 @@ graph TD
 
 ---
 
-### 8. `qbit.lan` (CT 105) <img src="assets/icons/download.svg" width="18" height="18" alt="Download" style="vertical-align: middle;" />
+### 8. `qbit.lan` (CT 105) <img src="/assets/icons/download.svg" width="18" height="18" alt="Download" style="vertical-align: middle;" />
 - **Documentation:** [`containers/ct105-qbit.md`](containers/ct105-qbit.md)
 - **Role:** Torrent downloader handling television and movie file transfers.
 - **Port:** `8090`
@@ -225,7 +225,7 @@ graph TD
 
 ---
 
-### 9. `docker.lan` (VM 102) <img src="assets/icons/docker.svg" width="18" height="18" alt="Docker" style="vertical-align: middle;" />
+### 9. `docker.lan` (VM 102) <img src="/assets/icons/docker.svg" width="18" height="18" alt="Docker" style="vertical-align: middle;" />
 - **Role:** Dedicated Docker VM with 16GB RAM hosting multiple application stacks.
 - **Hosted Stacks:**
   - **OpenKOS Suite:** (Uses CT 106 PostgreSQL)
@@ -245,7 +245,7 @@ graph TD
 
 ---
 
-### 10. `postgresql.lan` (CT 106) <img src="assets/icons/database.svg" width="18" height="18" alt="Database" style="vertical-align: middle;" />
+### 10. `postgresql.lan` (CT 106) <img src="/assets/icons/database.svg" width="18" height="18" alt="Database" style="vertical-align: middle;" />
 - **Role:** Dedicated shared database server running PostgreSQL and Adminer.
 - **Default Port:** `5432`
 - **Adminer Port:** `80` (access at `http://postgresql.lan/adminer`)

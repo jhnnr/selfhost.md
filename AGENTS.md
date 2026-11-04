@@ -82,18 +82,18 @@ Understand the multi-tier storage architecture before suggesting or documenting 
   - `docs/inventory.md`
   - Any upstream dependency (e.g., `postgresql.lan`, `adguard.lan`, `cloudflared.lan`).
 
-### Rule 6: MkDocs Build Integrity
-- All documentation files in `docs/` must compile cleanly with standard MkDocs (`theme: name: mkdocs`).
-- When adding new markdown pages, add them to the navigation tree in `mkdocs.yml`.
-- Always validate documentation changes by running `python -m mkdocs build --strict`.
+### Rule 6: VitePress Build Integrity
+- All documentation files in `docs/` must compile cleanly with VitePress.
+- When adding new markdown pages, add them to the navigation/sidebar tree in `docs/.vitepress/config.mts`.
+- Always validate documentation changes by running `npm run docs:build`.
 
 ### Rule 7: Strictly No Emojis (Use SVGs)
 - Do NOT use emojis in documentation titles, headings, or content.
-- Use clean typography or vector SVGs located in `docs/assets/icons/` when visual iconography is required.
+- Use clean typography or vector SVGs located in `docs/public/assets/icons/` when visual iconography is required.
 
 ### Rule 8: AI Guidelines Isolation
 - `AGENTS.md` and `GEMINI.md` are strictly for AI agent instructions and repository governance.
-- Never add `AGENTS.md` or `GEMINI.md` to `docs/` or expose them in the `mkdocs.yml` navigation tree.
+- Never add `AGENTS.md` or `GEMINI.md` to `docs/` or expose them in the `docs/.vitepress/config.mts` navigation tree.
 
 ---
 

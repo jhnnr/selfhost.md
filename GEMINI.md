@@ -148,20 +148,23 @@ When documenting a new LXC container, VM, or Docker Service, use the following s
 
 ---
 
-## 5. Development, MkDocs & Validation Commands
+## 5. Development, VitePress & Validation Commands
 
-This repository uses standard **MkDocs** (`theme: name: mkdocs`) to compile documentation into a searchable, responsive static site automatically deployed to **GitHub Pages** via GitHub Actions.
+This repository uses **VitePress** (`vitepress` + `vitepress-plugin-mermaid`) to compile documentation into a blazing-fast, responsive static site automatically deployed to **GitHub Pages** via GitHub Actions.
 
 ### Local Development
 ```bash
 # Install dependencies
-python -m pip install -r requirements.txt
+npm install
 
-# Start local hot-reloading preview server (default: http://127.0.0.1:8000)
-python -m mkdocs serve
+# Start local hot-reloading development server
+npm run docs:dev
 
-# Validate full build and verify all internal links in strict mode
-python -m mkdocs build --strict
+# Validate full production build
+npm run docs:build
+
+# Preview built production site locally
+npm run docs:preview
 ```
 
 ### GitHub Pages Setup
