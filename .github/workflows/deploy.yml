@@ -34,6 +34,12 @@ jobs:
           mv mdbook-mermaid ~/.cargo/bin/
           echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
+      - name: Install Graphviz
+        run: sudo apt-get update && sudo apt-get install -y graphviz
+
+      - name: Compile Graphviz Digraph Diagrams
+        run: dot -Tsvg docs/network/network-topology.dot -o docs/assets/network-topology.svg
+
       - name: Build with mdBook
         run: mdbook build
 

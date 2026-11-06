@@ -2,6 +2,10 @@
 
 This document details the IP addressing, routing tables, DNS resolution, DHCP scopes, and ingress mechanisms across the homelab network.
 
+<div style="text-align: center; margin: 1.5rem 0;">
+  <img src="../assets/network-topology.svg" alt="Network Topology Digraph" style="max-width: 100%; height: auto; border-radius: 8px; border: 1px solid #334155;" />
+</div>
+
 ---
 
 ## 1. Network Segmentation & Subnets

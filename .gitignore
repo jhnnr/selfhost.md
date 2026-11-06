@@ -15,7 +15,7 @@ tokens.json
 rclone.conf
 id_rsa*
 id_ed25519*
-
+gemini
 # Backups & Database Dumps
 *.sql
 *.sql.gz

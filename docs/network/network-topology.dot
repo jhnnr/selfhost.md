@@ -1,0 +1,206 @@
+digraph NetworkTopology {
+    // Global graph settings
+    graph [
+        rankdir = "TB",
+        compound = true,
+        bgcolor = "#161f27",
+        fontname = "Helvetica, Arial, sans-serif",
+        fontsize = 12,
+        nodesep = 0.5,
+        ranksep = 0.6,
+        pad = "0.4"
+    ];
+
+    // Global node settings
+    node [
+        shape = box,
+        style = "rounded,filled",
+        fillcolor = "#1e293b",
+        color = "#38bdf8",
+        penwidth = 1.5,
+        fontname = "Helvetica, Arial, sans-serif",
+        fontsize = 11,
+        fontcolor = "#f8fafc",
+        margin = "0.2,0.15"
+    ];
+
+    // Global edge settings
+    edge [
+        fontname = "Helvetica, Arial, sans-serif",
+        fontsize = 9,
+        fontcolor = "#94a3b8",
+        color = "#64748b",
+        penwidth = 1.2,
+        arrowsize = 0.8
+    ];
+
+    // External / Cloud Cluster
+    subgraph cluster_external {
+        label = "External / Cloud Ingress";
+        fontcolor = "#94a3b8";
+        fontsize = 12;
+        style = "dashed";
+        color = "#475569";
+        bgcolor = "#0f172a";
+
+        wan [
+            label = "Public Internet / Mobile Data",
+            shape = ellipse,
+            fillcolor = "#1e293b",
+            color = "#0ea5e9"
+        ];
+        cf [
+            label = "Cloudflare Edge / Tunnel\nZero-Trust Ingress",
+            fillcolor = "#1e293b",
+            color = "#f97316"
+        ];
+        vps [
+            label = "Oracle Cloud VPS (openvpn-oracle)\nMesh Subnet: 100.96.0.0/12",
+            fillcolor = "#1e293b",
+            color = "#a855f7"
+        ];
+    }
+
+    // Physical Network Cluster
+    subgraph cluster_physical {
+        label = "Home Physical Network (192.168.100.0/24)";
+        fontcolor = "#94a3b8";
+        fontsize = 12;
+        style = "dashed";
+        color = "#475569";
+        bgcolor = "#0f172a";
+
+        router [
+            label = "ISP Home Router\nIP: 192.168.100.1 (br0)\nStatic Route: 10.10.0.0/24 via 192.168.100.2",
+            fillcolor = "#1e293b",
+            color = "#38bdf8"
+        ];
+    }
+
+    // Proxmox VE Host Cluster
+    subgraph cluster_pve {
+        label = "Proxmox VE Hypervisor Host (pve01)";
+        fontcolor = "#e2e8f0";
+        fontsize = 13;
+        style = "filled";
+        fillcolor = "#1e293b";
+        color = "#0ea5e9";
+        penwidth = 2;
+
+        vmbr0 [
+            label = "vmbr0 (Physical Bridge)\nIP: 192.168.100.2",
+            fillcolor = "#334155",
+            color = "#60a5fa"
+        ];
+        vmbr1 [
+            label = "vmbr1 (Internal Bridge & NAT Gateway)\nIP: 10.10.0.1",
+            fillcolor = "#334155",
+            color = "#60a5fa"
+        ];
+        host_smb [
+            label = "Host SMB Mount (/etc/fstab)\n/mnt/pve/smb-rclone.lan/Media",
+            shape = folder,
+            fillcolor = "#0f172a",
+            color = "#eab308"
+        ];
+    }
+
+    // Homelab Internal Subnet Cluster
+    subgraph cluster_homelab {
+        label = "Homelab Subnet (10.10.0.0/24 via vmbr1)";
+        fontcolor = "#e2e8f0";
+        fontsize = 13;
+        style = "dashed";
+        color = "#0284c7";
+        bgcolor = "#0c1319";
+
+        ct100 [
+            label = "[CT 100] adguard.lan\n10.10.0.2 (Static)\nPrimary DNS :53 | DHCP Server | UI :3000",
+            fillcolor = "#1e293b",
+            color = "#22c55e"
+        ];
+        ct101 [
+            label = "[CT 101] cloudflared.lan\n10.10.0.3 (Static)\nCloudflare Tunnel Daemon & DoH Proxy",
+            fillcolor = "#1e293b",
+            color = "#f97316"
+        ];
+        vm102 [
+            label = "[VM 102] docker.lan (16GB RAM)\nOpenKOS (:8181) | Firefly III (:800)\nPodPDF (:2873) | Portainer (:9443)",
+            fillcolor = "#1e293b",
+            color = "#38bdf8"
+        ];
+        ct106 [
+            label = "[CT 106] postgresql.lan\nPostgreSQL Database :5432\nAdminer Web UI :80/adminer",
+            fillcolor = "#1e293b",
+            color = "#a855f7"
+        ];
+        ct103 [
+            label = "[CT 103] rclone.lan\nRclone FUSE (GDrive: /mnt/gdrive/plex)\nTAS FUSE (/mnt/tas) | Samba Server",
+            fillcolor = "#1e293b",
+            color = "#eab308"
+        ];
+        ct104 [
+            label = "[CT 104] plex.lan\nPlex Media Server :32400\nMovies (ID 2) | TV Shows (ID 3)",
+            fillcolor = "#1e293b",
+            color = "#ec4899"
+        ];
+        ct105 [
+            label = "[CT 105] qbit.lan\nqBittorrent WebUI :8090 (Bearer Auth)\nTarget: /downloads/tv-sonarr",
+            fillcolor = "#1e293b",
+            color = "#06b6d4"
+        ];
+        sonarr [
+            label = "sonarr.lan (LXC)\nTV Automation :8989\nPost-Import Relocate Hook",
+            fillcolor = "#1e293b",
+            color = "#14b8a6"
+        ];
+        seer [
+            label = "seer.lan (LXC)\nJellyseerr / Overseerr Discovery :5055\nMedia Requests & Metadata",
+            fillcolor = "#1e293b",
+            color = "#6366f1"
+        ];
+    }
+
+    // External Connections
+    wan -> cf [label = "HTTPS (Ingress)", color = "#f97316"];
+    wan -> vps [label = "Encrypted Mesh", color = "#a855f7"];
+    router -> vmbr0 [label = "Uplink"];
+    vps -> vmbr0 [label = "Mesh Gateway", color = "#a855f7"];
+    cf -> ct101 [label = "Tunnel Traffic", color = "#f97316"];
+
+    // Host Bridges & Routing
+    vmbr0 -> vmbr1 [label = "NAT / MASQUERADE", color = "#60a5fa"];
+    vmbr1 -> ct100 [label = "DNS / DHCP", color = "#22c55e"];
+    vmbr1 -> ct101;
+    vmbr1 -> vm102;
+    vmbr1 -> ct106;
+    vmbr1 -> ct103;
+    vmbr1 -> ct104;
+    vmbr1 -> ct105;
+    vmbr1 -> sonarr;
+    vmbr1 -> seer;
+
+    // Storage Pipeline
+    ct103 -> host_smb [
+        label = "Samba Export (//rclone.lan/gdrive)",
+        style = "dashed",
+        color = "#eab308"
+    ];
+    host_smb -> ct104 [
+        label = "Bind Mount (mp0 -> /mnt/media)",
+        color = "#ec4899",
+        penwidth = 1.8
+    ];
+    host_smb -> ct105 [
+        label = "Bind Mount (mp0 -> /mnt/media)",
+        color = "#06b6d4",
+        penwidth = 1.8
+    ];
+
+    // Service Integrations
+    vm102 -> ct106 [label = "PostgreSQL Client (:5432)", color = "#a855f7"];
+    seer -> sonarr [label = "Submit Requests", color = "#14b8a6"];
+    seer -> ct104 [label = "Check Availability", color = "#6366f1"];
+    sonarr -> ct105 [label = "API Download Command", color = "#06b6d4"];
+    ct105 -> ct104 [label = "Completion Trigger (Scan API)", style = "dotted", color = "#ec4899"];
+}
