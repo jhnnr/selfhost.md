@@ -79,18 +79,20 @@ digraph NetworkTopology {
             >,
             color = "#f97316"
         ];
-
-        vps_oracle [
-            label = <
-                <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
-                    <TR><TD BGCOLOR="#6b21a8" ALIGN="CENTER"><FONT COLOR="#ffffff"><B>Oracle Cloud VPS</B></FONT></TD></TR>
-                    <TR><TD ALIGN="CENTER"><FONT COLOR="#cbd5e1" POINT-SIZE="9">openvpn-oracle</FONT></TD></TR>
-                    <TR><TD ALIGN="CENTER"><FONT COLOR="#94a3b8" POINT-SIZE="8">Cloud Mesh Node / Remote Access</FONT></TD></TR>
-                </TABLE>
-            >,
-            color = "#a855f7"
-        ];
     }
+
+    // Remote Cloud Node (Independent, outside Ingress & Edge Routing)
+    vps_oracle [
+        label = <
+            <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+                <TR><TD BGCOLOR="#6b21a8" ALIGN="CENTER"><FONT COLOR="#ffffff"><B>Oracle Cloud VPS</B></FONT></TD></TR>
+                <TR><TD ALIGN="CENTER"><FONT COLOR="#cbd5e1" POINT-SIZE="9">openvpn-oracle</FONT></TD></TR>
+                <TR><TD ALIGN="CENTER"><FONT COLOR="#94a3b8" POINT-SIZE="8">Cloud Mesh Node / Remote Access</FONT></TD></TR>
+            </TABLE>
+        >,
+        fillcolor = "#1e293b",
+        color = "#a855f7"
+    ];
 
     // Hypervisor Host: Proxmox VE (pve01)
     subgraph cluster_pve01 {
