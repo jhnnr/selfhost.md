@@ -17,4 +17,5 @@ edit-url-template = "https://github.com/jhnnr/selfhost.md/edit/main/docs/{path}"
 site-url = "/selfhost.md/"
 default-theme = "navy"
 preferred-dark-theme = "navy"
-additional-js = ["mermaid.min.js", "mermaid-init.js"]
+additional-css = ["lightbox.css"]
+additional-js = ["mermaid.min.js", "mermaid-init.js", "lightbox.js"]

@@ -1,0 +1,78 @@
+/* Lightbox Modal Overlay */
+.lightbox-modal {
+    display: none;
+    position: fixed;
+    z-index: 99999;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(10, 15, 25, 0.88);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    justify-content: center;
+    align-items: center;
+    cursor: zoom-out;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.lightbox-modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.lightbox-content {
+    max-width: 95vw;
+    max-height: 95vh;
+    object-fit: contain;
+    border-radius: 6px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+    background: #161f27;
+    padding: 12px;
+    cursor: default;
+    transform: scale(0.95);
+    transition: transform 0.2s ease-in-out;
+}
+
+.lightbox-modal.active .lightbox-content {
+    transform: scale(1);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    color: #e2e8f0;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+    z-index: 100000;
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid #475569;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.lightbox-close:hover {
+    color: #38bdf8;
+    background: #334155;
+    border-color: #38bdf8;
+}
+
+/* Zoomable image hover styles */
+.zoomable-image, img[src*="network-topology"] {
+    cursor: zoom-in !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.zoomable-image:hover, img[src*="network-topology"]:hover {
+    transform: scale(1.01);
+    box-shadow: 0 4px 20px rgba(56, 189, 248, 0.35);
+}

@@ -2,6 +2,7 @@ digraph NetworkTopology {
     // Global graph settings
     graph [
         rankdir = "TB",
+        splines = "line",
         compound = true,
         bgcolor = "#161f27",
         fontname = "Helvetica, Arial, sans-serif",
