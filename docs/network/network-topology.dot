@@ -4,10 +4,10 @@ digraph NetworkTopology {
         rankdir = "TB",
         splines = "ortho",
         compound = true,
-        bgcolor = "#161f27",
+        bgcolor = "#0f172a",
         fontname = "Helvetica, Arial, sans-serif",
         fontsize = 12,
-        nodesep = 0.65,
+        nodesep = 0.6,
         ranksep = 0.75,
         pad = "0.4"
     ];
@@ -17,8 +17,8 @@ digraph NetworkTopology {
         shape = box,
         style = "rounded,filled",
         fillcolor = "#1e293b",
-        color = "#38bdf8",
-        penwidth = 1.5,
+        color = "#334155",
+        penwidth = 1.2,
         fontname = "Helvetica, Arial, sans-serif",
         fontsize = 10,
         fontcolor = "#f8fafc",
@@ -28,250 +28,302 @@ digraph NetworkTopology {
     // Global edge styling
     edge [
         fontname = "Helvetica, Arial, sans-serif",
-        fontsize = 9,
+        fontsize = 8,
         fontcolor = "#94a3b8",
-        color = "#64748b",
+        color = "#475569",
         penwidth = 1.2,
         arrowsize = 0.75
     ];
 
-    // Sole top node: Public Internet
+    // Top Level: WAN
     wan [
-        label = "Public Internet",
+        label = <
+            <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5">
+                <TR><TD ALIGN="CENTER"><FONT COLOR="#38bdf8" POINT-SIZE="11"><B>Public Internet</B></FONT></TD></TR>
+                <TR><TD ALIGN="CENTER"><FONT COLOR="#64748b" POINT-SIZE="8">Global Ingress</FONT></TD></TR>
+            </TABLE>
+        >,
         shape = ellipse,
-        fillcolor = "#0f172a",
-        color = "#38bdf8",
-        fontcolor = "#f8fafc"
-    ];
-
-    // Physical Network Path
-    router [
-        label = "Home ISP Router\n192.168.100.1/24 (br0)\nStatic Route: 10.10.0.0/24\nvia 192.168.100.2",
         fillcolor = "#1e293b",
-        color = "#60a5fa"
+        color = "#0ea5e9",
+        penwidth = 2
     ];
 
-    // Cloudflare Edge / Mesh
-    cf_mesh [
-        label = "Cloudflare Edge / Mesh\nSubnet: 100.96.0.0/12\nZero-Trust Ingress",
-        fillcolor = "#1e293b",
-        color = "#f97316"
-    ];
+    // Ingress Tier
+    subgraph cluster_ingress {
+        label = "Ingress & Edge Routing";
+        fontcolor = "#94a3b8";
+        fontsize = 11;
+        style = "dashed";
+        color = "#334155";
+        bgcolor = "#0d1527";
 
-    // Oracle Cloud VPS Node (connected via Cloudflare Mesh)
-    vps_oracle [
-        label = "Oracle Cloud VPS (openvpn-oracle)\nCloud Mesh Node\nRemote Access Point",
-        fillcolor = "#1e293b",
-        color = "#a855f7"
-    ];
+        router [
+            label = <
+                <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+                    <TR><TD BGCOLOR="#1e40af" ALIGN="CENTER"><FONT COLOR="#ffffff"><B>Home ISP Router</B></FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#cbd5e1" POINT-SIZE="9">IP: 192.168.100.1/24 (br0)</FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#94a3b8" POINT-SIZE="8">Static Route: 10.10.0.0/24 via 192.168.100.2</FONT></TD></TR>
+                </TABLE>
+            >,
+            color = "#3b82f6"
+        ];
 
-    // Proxmox VE Host Cluster (pve01)
+        cf_mesh [
+            label = <
+                <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+                    <TR><TD BGCOLOR="#c2410c" ALIGN="CENTER"><FONT COLOR="#ffffff"><B>Cloudflare Edge / Mesh</B></FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#cbd5e1" POINT-SIZE="9">Subnet: 100.96.0.0/12</FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#94a3b8" POINT-SIZE="8">Zero-Trust Ingress &amp; Routing</FONT></TD></TR>
+                </TABLE>
+            >,
+            color = "#f97316"
+        ];
+
+        vps_oracle [
+            label = <
+                <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+                    <TR><TD BGCOLOR="#6b21a8" ALIGN="CENTER"><FONT COLOR="#ffffff"><B>Oracle Cloud VPS</B></FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#cbd5e1" POINT-SIZE="9">openvpn-oracle</FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#94a3b8" POINT-SIZE="8">Cloud Mesh Node / Remote Access</FONT></TD></TR>
+                </TABLE>
+            >,
+            color = "#a855f7"
+        ];
+    }
+
+    // Hypervisor Host: Proxmox VE (pve01)
     subgraph cluster_pve01 {
-        label = "Proxmox Host (pve01)";
-        fontcolor = "#e2e8f0";
-        fontsize = 12;
+        label = "Hypervisor Host: Proxmox VE (pve01)";
+        fontcolor = "#93c5fd";
+        fontsize = 11;
         style = "filled";
         fillcolor = "#111827";
-        color = "#0284c7";
-        penwidth = 1.8;
+        color = "#1e3a8a";
+        penwidth = 1.5;
 
         vmbr0 [
-            label = "vmbr0 (Physical Bridge)\n192.168.100.2",
-            fillcolor = "#334155",
-            color = "#60a5fa"
+            label = <
+                <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+                    <TR><TD BGCOLOR="#0369a1" ALIGN="CENTER"><FONT COLOR="#ffffff"><B>vmbr0 (Physical Bridge)</B></FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#cbd5e1" POINT-SIZE="9">Host IP: 192.168.100.2/24</FONT></TD></TR>
+                </TABLE>
+            >,
+            color = "#0ea5e9"
         ];
 
         vmbr1 [
-            label = "vmbr1 (NAT Gateway for 10.10.0.0/24)\n10.10.0.1 (GW)",
-            fillcolor = "#334155",
-            color = "#60a5fa"
+            label = <
+                <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+                    <TR><TD BGCOLOR="#0369a1" ALIGN="CENTER"><FONT COLOR="#ffffff"><B>vmbr1 (NAT Gateway)</B></FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#cbd5e1" POINT-SIZE="9">Gateway: 10.10.0.1/24</FONT></TD></TR>
+                </TABLE>
+            >,
+            color = "#0ea5e9"
         ];
 
         host_smb [
-            label = "Host SMB Mount (/etc/fstab)\n/mnt/pve/smb-rclone.lan/Media",
-            shape = folder,
-            fillcolor = "#1e293b",
+            label = <
+                <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+                    <TR><TD BGCOLOR="#854d0e" ALIGN="CENTER"><FONT COLOR="#ffffff"><B>Host SMB Mount (/etc/fstab)</B></FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#cbd5e1" POINT-SIZE="9">/mnt/pve/smb-rclone.lan/Media</FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#94a3b8" POINT-SIZE="8">Source: //rclone.lan/gdrive</FONT></TD></TR>
+                </TABLE>
+            >,
             color = "#eab308"
         ];
     }
 
     // Homelab Subnet Cluster (10.10.0.0/24)
     subgraph cluster_homelab {
-        label = "10.10.0.0/24 Subnet (DHCP & DNS via 10.10.0.2)";
-        fontcolor = "#e2e8f0";
-        fontsize = 12;
+        label = "Homelab Subnet (10.10.0.0/24)";
+        fontcolor = "#94a3b8";
+        fontsize = 11;
         style = "dashed";
-        color = "#0284c7";
-        bgcolor = "#0b1118";
+        color = "#334155";
+        bgcolor = "#0a0f1d";
 
-        // CT 100: DNS & DHCP Server
         ct100 [
-            label = "[CT 100] adguard.lan\n10.10.0.2 (Static / adguard.home.server)\nPrimary DNS (:53) | DHCP Server | Web UI (:3000)",
-            fillcolor = "#1e293b",
+            label = <
+                <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+                    <TR><TD BGCOLOR="#15803d" ALIGN="CENTER"><FONT COLOR="#ffffff"><B>[CT 100] adguard.lan</B></FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#cbd5e1" POINT-SIZE="9">IP: 10.10.0.2 (Static)</FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#94a3b8" POINT-SIZE="8">DNS :53 | DHCP | Web UI :3000</FONT></TD></TR>
+                </TABLE>
+            >,
             color = "#22c55e"
         ];
 
-        // CT 101: Ingress via Cloudflare Tunnel
         ct101 [
-            label = "[CT 101] cloudflared.lan\n10.10.0.3 (Static)\nForwards DoH & Tunnel Traffic to 10.10.0.0/24",
-            fillcolor = "#1e293b",
+            label = <
+                <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+                    <TR><TD BGCOLOR="#c2410c" ALIGN="CENTER"><FONT COLOR="#ffffff"><B>[CT 101] cloudflared.lan</B></FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#cbd5e1" POINT-SIZE="9">IP: 10.10.0.3 (Static)</FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#94a3b8" POINT-SIZE="8">Tunnel Daemon &amp; DoH Proxy</FONT></TD></TR>
+                </TABLE>
+            >,
             color = "#f97316"
         ];
 
-        // VM 102: Dedicated Docker Host with Per-Project Nodes
-        subgraph cluster_vm102 {
+        // Dedicated Docker Host VM - Per-project nodes
+        subgraph cluster_docker {
             label = "[VM 102] docker.lan (DHCP) [16GB RAM]";
-            fontcolor = "#cbd5e1";
-            fontsize = 11;
+            fontcolor = "#38bdf8";
+            fontsize = 10;
             style = "filled";
             fillcolor = "#1e293b";
-            color = "#38bdf8";
+            color = "#0284c7";
 
-            proj_openkos [
-                label = "OpenKOS\n(:8181 -> :8080)\nWorker / Redis / Mailpit",
-                fillcolor = "#0f172a",
-                color = "#38bdf8"
-            ];
-
-            proj_firefly [
-                label = "Firefly III\n(:800 -> :8080)\nImporter / Cron",
-                fillcolor = "#0f172a",
-                color = "#38bdf8"
-            ];
-
-            proj_podpdf [
-                label = "PodPDF\n(:2873 -> :8080)",
-                fillcolor = "#0f172a",
-                color = "#38bdf8"
-            ];
-
-            proj_steamish [
-                label = "Steam-ish\n(:3112 -> :3000)",
-                fillcolor = "#0f172a",
-                color = "#38bdf8"
-            ];
-
-            proj_portainer [
-                label = "Portainer\n(:9443 / :8000)",
-                fillcolor = "#0f172a",
-                color = "#38bdf8"
-            ];
+            proj_openkos  [label = "OpenKOS\n(:8181 -> :8080)", fillcolor = "#0f172a", color = "#0284c7"];
+            proj_firefly  [label = "Firefly III\n(:800 -> :8080)", fillcolor = "#0f172a", color = "#0284c7"];
+            proj_podpdf   [label = "PodPDF\n(:2873 -> :8080)", fillcolor = "#0f172a", color = "#0284c7"];
+            proj_steamish [label = "Steam-ish\n(:3112 -> :3000)", fillcolor = "#0f172a", color = "#0284c7"];
+            proj_portainer [label = "Portainer\n(:9443 / :8000)", fillcolor = "#0f172a", color = "#0284c7"];
         }
 
-        // CT 103: Storage Controller
-        ct103 [
-            label = "[CT 103] rclone.lan (DHCP)\nRclone FUSE (/mnt/gdrive/plex, /mnt/tas)\nSamba Server (//rclone.lan/gdrive)",
-            fillcolor = "#1e293b",
-            color = "#eab308"
-        ];
-
-        // CT 104: Media Playback Server
-        ct104 [
-            label = "[CT 104] plex.lan (DHCP)\nPlex Media Server (:32400)\nMovies: Section 2 | TV Shows: Section 3",
-            fillcolor = "#1e293b",
-            color = "#ec4899"
-        ];
-
-        // CT 105: Download Client (Save path removed)
-        ct105 [
-            label = "[CT 105] qbit.lan (DHCP)\nqBittorrent WebUI (:8090, Bearer Auth)\nHook: discord_qbit_notification.sh",
-            fillcolor = "#1e293b",
-            color = "#06b6d4"
-        ];
-
-        // CT 106: Shared PostgreSQL Server
+        // Shared PostgreSQL Server
         ct106 [
-            label = "[CT 106] postgresql.lan (DHCP)\nShared PostgreSQL (:5432) & Adminer (:80/adminer)\nDatabases: openkos, firefly",
-            fillcolor = "#1e293b",
+            label = <
+                <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+                    <TR><TD BGCOLOR="#6b21a8" ALIGN="CENTER"><FONT COLOR="#ffffff"><B>[CT 106] postgresql.lan</B></FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#cbd5e1" POINT-SIZE="9">Shared PostgreSQL :5432</FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#94a3b8" POINT-SIZE="8">Adminer :80 | openkos, firefly</FONT></TD></TR>
+                </TABLE>
+            >,
             color = "#a855f7"
         ];
 
-        // CT 107: Media Discovery & Requests (Jellyseerr / Overseerr)
-        ct107 [
-            label = "[CT 107] seer.lan (DHCP)\nJellyseerr / Overseerr (:5055)\nMedia Discovery & Requests",
-            fillcolor = "#1e293b",
-            color = "#8b5cf6"
+        // Storage Controller
+        ct103 [
+            label = <
+                <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+                    <TR><TD BGCOLOR="#854d0e" ALIGN="CENTER"><FONT COLOR="#ffffff"><B>[CT 103] rclone.lan</B></FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#cbd5e1" POINT-SIZE="9">Rclone FUSE (GDrive / TAS)</FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#94a3b8" POINT-SIZE="8">Samba Server: //rclone.lan/gdrive</FONT></TD></TR>
+                </TABLE>
+            >,
+            color = "#eab308"
         ];
 
-        // CT 108: TV Automation (Sonarr)
+        // Media Playback Server
+        ct104 [
+            label = <
+                <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+                    <TR><TD BGCOLOR="#9d174d" ALIGN="CENTER"><FONT COLOR="#ffffff"><B>[CT 104] plex.lan</B></FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#cbd5e1" POINT-SIZE="9">Plex Media Server :32400</FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#94a3b8" POINT-SIZE="8">Movies (Sec 2) | TV Shows (Sec 3)</FONT></TD></TR>
+                </TABLE>
+            >,
+            color = "#ec4899"
+        ];
+
+        // Download Client
+        ct105 [
+            label = <
+                <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+                    <TR><TD BGCOLOR="#0e7490" ALIGN="CENTER"><FONT COLOR="#ffffff"><B>[CT 105] qbit.lan</B></FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#cbd5e1" POINT-SIZE="9">qBittorrent WebUI :8090</FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#94a3b8" POINT-SIZE="8">Bearer Auth | Notification Hook</FONT></TD></TR>
+                </TABLE>
+            >,
+            color = "#06b6d4"
+        ];
+
+        // Media Discovery & Requests
+        ct107 [
+            label = <
+                <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+                    <TR><TD BGCOLOR="#4338ca" ALIGN="CENTER"><FONT COLOR="#ffffff"><B>[CT 107] seer.lan</B></FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#cbd5e1" POINT-SIZE="9">Jellyseerr / Overseerr :5055</FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#94a3b8" POINT-SIZE="8">Media Discovery &amp; Requests</FONT></TD></TR>
+                </TABLE>
+            >,
+            color = "#6366f1"
+        ];
+
+        // TV Automation
         ct108 [
-            label = "[CT 108] sonarr.lan (DHCP)\nTV Automation (:8989)\nLibrary: /mnt/media/TV\nPost-Import Hook: qbit-relocate.sh",
-            fillcolor = "#1e293b",
+            label = <
+                <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+                    <TR><TD BGCOLOR="#0f766e" ALIGN="CENTER"><FONT COLOR="#ffffff"><B>[CT 108] sonarr.lan</B></FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#cbd5e1" POINT-SIZE="9">TV Automation :8989</FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#94a3b8" POINT-SIZE="8">Library: /mnt/media/TV</FONT></TD></TR>
+                </TABLE>
+            >,
             color = "#14b8a6"
         ];
 
-        // CT 109: Movie Automation (Radarr)
+        // Movie Automation
         ct109 [
-            label = "[CT 109] radarr.lan (DHCP)\nMovie Automation (:7878)\nLibrary: /mnt/media/Movies",
-            fillcolor = "#1e293b",
+            label = <
+                <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+                    <TR><TD BGCOLOR="#b45309" ALIGN="CENTER"><FONT COLOR="#ffffff"><B>[CT 109] radarr.lan</B></FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#cbd5e1" POINT-SIZE="9">Movie Automation :7878</FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#94a3b8" POINT-SIZE="8">Library: /mnt/media/Movies</FONT></TD></TR>
+                </TABLE>
+            >,
             color = "#f59e0b"
         ];
 
-        // CT 110: Indexer Management (Prowlarr)
+        // Indexer Proxy
         ct110 [
-            label = "[CT 110] prowlarr.lan (DHCP)\nIndexer Manager & Proxy (:9696)\nSync: Sonarr & Radarr",
-            fillcolor = "#1e293b",
+            label = <
+                <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+                    <TR><TD BGCOLOR="#1d4ed8" ALIGN="CENTER"><FONT COLOR="#ffffff"><B>[CT 110] prowlarr.lan</B></FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#cbd5e1" POINT-SIZE="9">Indexer Manager &amp; Proxy :9696</FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#94a3b8" POINT-SIZE="8">Sync: Sonarr &amp; Radarr</FONT></TD></TR>
+                </TABLE>
+            >,
             color = "#3b82f6"
         ];
 
-        // CT 111: Subtitle Automation (Bazarr)
+        // Subtitle Automation
         ct111 [
-            label = "[CT 111] bazarr.lan (DHCP)\nSubtitle Management (:6767)\nSync: Sonarr & Radarr",
-            fillcolor = "#1e293b",
+            label = <
+                <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+                    <TR><TD BGCOLOR="#047857" ALIGN="CENTER"><FONT COLOR="#ffffff"><B>[CT 111] bazarr.lan</B></FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#cbd5e1" POINT-SIZE="9">Subtitle Automation :6767</FONT></TD></TR>
+                    <TR><TD ALIGN="CENTER"><FONT COLOR="#94a3b8" POINT-SIZE="8">Sync: Sonarr &amp; Radarr</FONT></TD></TR>
+                </TABLE>
+            >,
             color = "#10b981"
         ];
     }
 
-    // Top-Level Ingress Routing
-    wan -> router [color = "#60a5fa"];
+    // Top Ingress Routing
+    wan -> router [color = "#3b82f6"];
     wan -> cf_mesh [color = "#f97316"];
+    router -> vmbr0 [color = "#3b82f6"];
 
-    // Home ISP router is the ONLY link connected to vmbr0
-    router -> vmbr0 [color = "#60a5fa"];
-
-    // Oracle Cloud VPS connects through Cloudflare Edge / Mesh
     cf_mesh -> vps_oracle [color = "#a855f7"];
+    cf_mesh -> ct101 [color = "#f97316", penwidth = 1.6];
 
-    // Cloudflare Edge / Mesh connects directly through cloudflared.lan
-    cf_mesh -> ct101 [color = "#f97316", penwidth = 1.5];
+    // Bridge NAT Interconnect
+    vmbr0 -> vmbr1 [color = "#0ea5e9"];
 
-    // Proxmox Internal NAT Bridge
-    vmbr0 -> vmbr1 [color = "#60a5fa"];
+    // Gateway to Subnet Services
+    vmbr1 -> ct100 [color = "#22c55e"];
+    vmbr1 -> ct101 [color = "#475569"];
+    vmbr1 -> proj_openkos [color = "#475569"];
+    vmbr1 -> ct106 [color = "#475569"];
+    vmbr1 -> ct103 [color = "#475569"];
 
-    // Subnet Distribution from Gateway
-    vmbr1 -> ct100;
-    vmbr1 -> ct101;
-    vmbr1 -> ct106;
-    vmbr1 -> proj_openkos;
-    vmbr1 -> proj_firefly;
-    vmbr1 -> proj_podpdf;
-    vmbr1 -> proj_steamish;
-    vmbr1 -> proj_portainer;
-    vmbr1 -> ct103;
-    vmbr1 -> ct104;
-    vmbr1 -> ct105;
-    vmbr1 -> ct107;
-    vmbr1 -> ct108;
-    vmbr1 -> ct109;
-    vmbr1 -> ct110;
-    vmbr1 -> ct111;
+    // Database Connections from Docker Projects to CT 106
+    proj_openkos -> ct106 [color = "#a855f7", penwidth = 1.4];
+    proj_firefly -> ct106 [color = "#a855f7", penwidth = 1.4];
 
-    // Database Connections from Docker Projects to CT 106 (postgresql.lan)
-    proj_openkos -> ct106 [color = "#a855f7", xlabel = "DB (:5432)"];
-    proj_firefly -> ct106 [color = "#a855f7", xlabel = "DB (:5432)"];
-
-    // Storage Pipeline: CT 103 Samba Share -> Host Mount -> LXC Bind Mounts
+    // Storage Mount Pipeline (Samba Share -> Host Mount -> LXC Bind Mounts)
     ct103 -> host_smb [style = "dashed", color = "#eab308"];
-    host_smb -> ct104 [color = "#ec4899", penwidth = 1.6];
-    host_smb -> ct105 [color = "#06b6d4", penwidth = 1.6];
-    host_smb -> ct108 [color = "#14b8a6", penwidth = 1.6];
-    host_smb -> ct109 [color = "#f59e0b", penwidth = 1.6];
-    host_smb -> ct111 [color = "#10b981", penwidth = 1.6];
+    host_smb -> ct104 [color = "#ec4899", penwidth = 1.5];
+    host_smb -> ct105 [color = "#06b6d4", penwidth = 1.5];
+    host_smb -> ct108 [color = "#14b8a6", penwidth = 1.5];
+    host_smb -> ct109 [color = "#f59e0b", penwidth = 1.5];
+    host_smb -> ct111 [color = "#10b981", penwidth = 1.5];
 
     // Media Automation Pipeline Interconnects
     ct107 -> ct108 [color = "#14b8a6"];
     ct107 -> ct109 [color = "#f59e0b"];
-    ct107 -> ct104 [color = "#8b5cf6"];
+    ct107 -> ct104 [color = "#6366f1"];
     ct110 -> ct108 [color = "#3b82f6"];
     ct110 -> ct109 [color = "#3b82f6"];
     ct108 -> ct105 [color = "#06b6d4"];
