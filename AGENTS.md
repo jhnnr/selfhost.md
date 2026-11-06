@@ -23,17 +23,23 @@ When analyzing user prompts or proposing changes, you MUST adhere to the existin
 | **`pve01`** | Bare Metal | `pve01` | `192.168.100.2` (vmbr0)<br>`10.10.0.1` (vmbr1) | Proxmox VE Hypervisor Host (GW for 10.10.0.0/24) | Manages SMB mounts in `/etc/fstab` (`smb.rclone.lan`) |
 | **CT 100** | LXC | `adguard.lan` | `10.10.0.2` (Static) | Primary DNS (`:53`), DHCP Server, Web UI (`:3000`) | AdGuard Home data |
 | **CT 101** | LXC | `cloudflared.lan` | `10.10.0.3` (Static) | Cloudflare Tunnel daemon, DoH proxy | Cloudflare credentials & config |
-| **VM 102** | VM (16GB) | `docker.lan` | DHCP (`10.10.0.x`) | Docker stacks: OpenKOS, Firefly III, PodPDF, Steam-ish, Portainer | Docker volumes & mounts |
+| **VM 102** | VM (16GB) | `docker.lan` | DHCP (`10.10.0.x`) | Projects: OpenKOS (`:8181`), Firefly III (`:800`), PodPDF (`:2873`), Steam-ish (`:3112`), Portainer (`:9443`) | Docker volumes & mounts |
 | **CT 103** | LXC | `rclone.lan` | DHCP (`10.10.0.x`) | Rclone FUSE (gdrive, TAS), Samba (`//rclone.lan/gdrive`), `plex-watcher.service` | `/mnt/gdrive/plex`, `/mnt/tas` |
 | **CT 104** | LXC | `plex.lan` | DHCP (`10.10.0.x`) | Plex Media Server (`:32400`), Sections: Movies (2), TV (3) | Bind mount: `/mnt/media` <-- Host SMB |
-| **CT 105** | LXC | `qbit.lan` | DHCP (`10.10.0.x`) | qBittorrent WebUI (`:8090`), Bearer Token Auth | Bind mount: `/mnt/media`, `/downloads/tv-sonarr` |
+| **CT 105** | LXC | `qbit.lan` | DHCP (`10.10.0.x`) | qBittorrent WebUI (`:8090`), Bearer Token Auth | Bind mount: `/mnt/media` <-- Host SMB |
 | **CT 106** | LXC | `postgresql.lan`| DHCP (`10.10.0.x`) | Shared PostgreSQL (`:5432`), Adminer (`:80/adminer`) | Databases: `openkos`, `firefly` |
 | **CT 107** | LXC | `seer.lan` | DHCP (`10.10.0.x`) | Jellyseerr / Overseerr (`:5055`), Sonarr & Plex API | Local config |
 | **CT 108** | LXC | `sonarr.lan` | DHCP (`10.10.0.x`) | TV show automation (`:8989`), Post-import relocate hook | Bind mount: `/mnt/media` <-- Host SMB |
-| **CT 109** | LXC | `radarr.lan` | DHCP (`10.10.0.x`) | Movie automation (`:7878`), Plex Movie import | Bind mount: `/mnt/media/Movies` |
+| **CT 109** | LXC | `radarr.lan` | DHCP (`10.10.0.x`) | Movie automation (`:7878`), Plex Movie import | Bind mount: `/mnt/media` <-- Host SMB |
 | **CT 110** | LXC | `prowlarr.lan` | DHCP (`10.10.0.x`) | Indexer manager & proxy (`:9696`), syncs to Sonarr/Radarr | Local config |
-| **CT 111** | LXC | `bazarr.lan` | DHCP (`10.10.0.x`) | Subtitle automation (`:6767`), syncs with Sonarr/Radarr | Bind mount: `/mnt/media` |
-| **VPS** | Remote VM | `openvpn-oracle`| Cloud Mesh (`100.96.0.0/12`) | Cloud mesh ingress node / remote access point | OpenVPN / WireGuard mesh |
+| **CT 111** | LXC | `bazarr.lan` | DHCP (`10.10.0.x`) | Subtitle automation (`:6767`), syncs with Sonarr/Radarr | Bind mount: `/mnt/media` <-- Host SMB |
+| **VPS** | Remote VM | `openvpn-oracle`| Cloud Mesh (`100.96.0.0/12`) | Cloud mesh ingress node / remote access point | Connected via Cloudflare Mesh |
+
+### Ingress & Network Topology Architecture
+- **Sole Top Node:** `Public Internet` (no cellular/mobile data splits).
+- **Physical Link:** Home ISP Router (`192.168.100.1/24`) is the **only** link connected to Proxmox physical bridge `vmbr0` (`192.168.100.2`).
+- **Cloud Mesh:** Cloudflare Edge / Mesh (`100.96.0.0/12`) connects directly to `[CT 101] cloudflared.lan` (`10.10.0.3`) and the remote `openvpn-oracle VPS`.
+- **Diagrams:** Authored in Graphviz DOT format in `docs/network/network-topology.dot` and compiled to `docs/assets/network-topology.svg` using `splines = "ortho"` (strictly 90-degree right angles with zero curving).
 
 ---
 
@@ -54,7 +60,7 @@ When analyzing user prompts or proposing changes, you MUST adhere to the existin
 - Whenever adding, modifying, or removing a service or container:
   1. Inspect `docs/inventory.md` before picking any IP or Port.
   2. Ensure the chosen port on `docker.lan` is free.
-  3. Ensure the chosen IP / Container ID is unassigned.
+  3. Ensure the chosen IP / Container ID is unassigned (next available: CT 112+).
   4. Update `docs/inventory.md` immediately in the same turn or task.
 
 ### Rule 3: Storage Pipeline Awareness
@@ -62,11 +68,17 @@ Understand the multi-tier storage architecture before suggesting or documenting 
 1. **Remote Cloud / TAS:** Handled by `rclone.lan` (CT 103) via FUSE at `/mnt/gdrive/plex` and `/mnt/tas`.
 2. **Samba Export:** `rclone.lan` exports `//rclone.lan/gdrive`.
 3. **Proxmox Host Mount:** `pve01` mounts SMB via `/etc/fstab` to `/mnt/pve/smb-rclone.lan/Media`.
-4. **LXC Bind Mount:** Proxmox bind-mounts `/mnt/pve/smb-rclone.lan/Media` into `plex.lan` (CT 104) and `qbit.lan` (CT 105) at `/mnt/media`.
+4. **LXC Bind Mount:** Proxmox bind-mounts `/mnt/pve/smb-rclone.lan/Media` into:
+   - `plex.lan` (CT 104) at `/mnt/media`
+   - `qbit.lan` (CT 105) at `/mnt/media`
+   - `sonarr.lan` (CT 108) at `/mnt/media`
+   - `radarr.lan` (CT 109) at `/mnt/media`
+   - `bazarr.lan` (CT 111) at `/mnt/media`
 5. **Application Paths:**
    - Plex accesses `/mnt/media/Movies` and `/mnt/media/TV`.
-   - Sonarr tracks `/mnt/media/TV`.
-   - qBittorrent downloads to `/downloads/tv-sonarr` and uses Sonarr remote path mappings.
+   - Sonarr manages `/mnt/media/TV`.
+   - Radarr manages `/mnt/media/Movies`.
+   - Bazarr manages subtitles across `/mnt/media/TV` and `/mnt/media/Movies`.
    - Post-import script `/root/scripts/qbit-relocate.sh` handles relocation, cleanup, and seeding resumption.
 
 ### Rule 4: Script & Automation Integrity
