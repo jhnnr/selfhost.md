@@ -27,11 +27,11 @@ Welcome to the central documentation portal for my personal homelab infrastructu
 | **Plex** | `plex.lan` | LXC (CT 104) | DHCP (`10.10.0.x`) | Plex Media Server (:32400) |
 | **qBittorrent**| [`qbit.lan`](containers/ct105-qbit.md) | LXC (CT 105) | DHCP (`10.10.0.x`) | Torrent Downloader (:8090, API Key Auth) |
 | **PostgreSQL** | `postgresql.lan` | LXC (CT 106) | DHCP (`10.10.0.x`) | Central Database Server (:5432) & Adminer (:80/adminer) |
-| **Sonarr** | `sonarr.lan` | LXC | DHCP (`10.10.0.x`) | TV Automation (:8989), Relocate Script Hooks |
+| **Seer** | `seer.lan` | LXC (CT 107) | DHCP (`10.10.0.x`) | Jellyseerr / Overseerr Media Requests (:5055) |
+| **Sonarr** | `sonarr.lan` | LXC (CT 108) | DHCP (`10.10.0.x`) | TV Automation (:8989), Relocate Script Hooks |
 | **Radarr** | `radarr.lan` | LXC (CT 109) | DHCP (`10.10.0.x`) | Movie Automation (:7878), Movie Library (/mnt/media/Movies) |
 | **Prowlarr** | `prowlarr.lan` | LXC (CT 110) | DHCP (`10.10.0.x`) | Indexer Manager & Proxy (:9696), Sync to Sonarr/Radarr |
 | **Bazarr** | `bazarr.lan` | LXC (CT 111) | DHCP (`10.10.0.x`) | Subtitle Automation (:6767), Sync to Sonarr/Radarr |
-| **Seer** | `seer.lan` | LXC | DHCP (`10.10.0.x`) | Jellyseerr / Overseerr Media Requests (:5055) |
 | **Cloud Mesh** | `openvpn-oracle`| Oracle VPS | `100.96.0.0/12` Mesh | Remote Access Mesh Node & Fallback Tunnel |
 
 ---

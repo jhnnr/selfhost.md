@@ -60,11 +60,11 @@ selfhost.md/
 │   │   ├── ct104-plex.md
 │   │   ├── ct105-qbit.md
 │   │   ├── ct106-postgresql.md
+│   │   ├── ct107-seer.md
+│   │   ├── ct108-sonarr.md
 │   │   ├── ct109-radarr.md
 │   │   ├── ct110-prowlarr.md
-│   │   ├── ct111-bazarr.md
-│   │   ├── sonarr.md
-│   │   └── seer.md
+│   │   └── ct111-bazarr.md
 │   ├── virtual-machines/           # VM documentation
 │   │   └── vm102-docker.md
 │   ├── services/                   # Application stacks running on Docker or bare metal

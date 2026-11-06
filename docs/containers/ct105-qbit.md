@@ -15,7 +15,6 @@ This document details the configuration, storage bindings, API integrations, and
 | **Web UI Port** | `8090` (HTTP) |
 | **Authentication** | WebAPI v2.14+ Bearer Token API Key Auth |
 | **Storage Bind Mount** | `/mnt/media` <-- Proxmox host `/mnt/pve/smb-rclone.lan/Media` |
-| **Default Download Root** | `/downloads/tv-sonarr` |
 
 ---
 
@@ -23,8 +22,7 @@ This document details the configuration, storage bindings, API integrations, and
 
 - **Bind Mount (`mp0`):**
   Host path `/mnt/pve/smb-rclone.lan/Media` is mounted inside the container at `/mnt/media`.
-- **Target Directories:**
-  - `/downloads/tv-sonarr` — Designated landing directory for automated TV downloads managed by Sonarr.
+- **Media Directories:**
   - `/mnt/media/TV` — Final library location (used when seeding from library).
   - `/mnt/media/Movies` — Movie library directory.
 

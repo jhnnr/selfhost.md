@@ -24,13 +24,13 @@ This document details the multi-layered storage architecture connecting Cloud st
   +-- /mnt/pve/smb-rclone.lan/Media (Mounted via /etc/fstab)
          |
          |  (LXC Bind Mounts via mp0)
-         +----------------------------------------+
-         |                                        |
-         v                                        v
-[ CT 104: plex.lan ]                    [ CT 105: qbit.lan ]
-  +-- /mnt/media                          +-- /mnt/media
-        |-- Movies (Section ID 2)               +-- /downloads/tv-sonarr
-        +-- TV (Section ID 3)
+         +-----------------------+-----------------------+-----------------------+
+         |                       |                       |                       |
+         v                       v                       v                       v
+[ CT 104: plex.lan ]    [ CT 105: qbit.lan ]    [ CT 108: sonarr.lan ]  [ CT 109: radarr.lan ]
+  +-- /mnt/media          +-- /mnt/media          +-- /mnt/media          +-- /mnt/media
+        |-- Movies (2)                                  +-- /TV                 +-- /Movies
+        +-- TV (3)
 ```
 
 ---
@@ -82,18 +82,33 @@ mp0: /mnt/pve/smb-rclone.lan/Media,mp=/mnt/media
 mp0: /mnt/pve/smb-rclone.lan/Media,mp=/mnt/media
 ```
 
+### CT 108 (`sonarr.lan`)
+```ini
+mp0: /mnt/pve/smb-rclone.lan/Media,mp=/mnt/media
+```
+
+### CT 109 (`radarr.lan`)
+```ini
+mp0: /mnt/pve/smb-rclone.lan/Media,mp=/mnt/media
+```
+
+### CT 111 (`bazarr.lan`)
+```ini
+mp0: /mnt/pve/smb-rclone.lan/Media,mp=/mnt/media
+```
+
 ---
 
 ## 4. Media Ingestion & Relocation Flow
 
-1. **Discovery & Request:** User requests media on `seer.lan` (Jellyseerr).
-2. **TV Automation:** `seer.lan` passes request to `sonarr.lan`.
-3. **Grab & Download:** `sonarr.lan` instructs `qbit.lan:8090` (using Bearer Token) to grab release, saving to `/downloads/tv-sonarr`.
+1. **Discovery & Request:** User requests media on `seer.lan` (CT 107 - Jellyseerr).
+2. **Arr Automation:** `seer.lan` passes request to `sonarr.lan` (CT 108) or `radarr.lan` (CT 109).
+3. **Grab & Download:** Automation daemons instruct `qbit.lan:8090` (CT 105, using Bearer Token) to grab release.
 4. **Torrent Completion Hook (`discord_qbit_notification.sh`):**
    - On completion, qBittorrent executes `/root/.config/qBittorrent/discord_qbit_notification.sh`.
    - Directly triggers Plex refresh for Movies (Section 2) or TV (Section 3).
    - Dispatches Discord embed notifications for non-Arr categories (skips `tv-sonarr`, `radarr` to prevent duplicate alerts).
 5. **Post-Import Relocation Hook (`qbit-relocate.sh`):**
    - When download completes, `sonarr.lan` invokes `/root/scripts/qbit-relocate.sh`.
-   - The script renames/relocates the media to the final `/mnt/media/TV` directory, cleans up temporary local files, and triggers qBittorrent to update its seeding target without duplicate storage consumption.
-6. **Plex Library Update:** `plex-watcher.service` on `rclone.lan` or Sonarr's notification triggers Plex (`plex.lan`) to refresh TV Shows (Section `3`).
+   - The script renames/relocates the media to the final `/mnt/media/TV` directory on the mounted SMB share, cleans up temporary local files, and triggers qBittorrent to update its seeding target without duplicate storage consumption.
+6. **Plex Library Update:** `plex-watcher.service` on `rclone.lan` or Arr notification triggers Plex (`plex.lan`) to refresh library sections.

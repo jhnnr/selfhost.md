@@ -28,11 +28,11 @@ When analyzing user prompts or proposing changes, you MUST adhere to the existin
 | **CT 104** | LXC | `plex.lan` | DHCP (`10.10.0.x`) | Plex Media Server (`:32400`), Sections: Movies (2), TV (3) | Bind mount: `/mnt/media` <-- Host SMB |
 | **CT 105** | LXC | `qbit.lan` | DHCP (`10.10.0.x`) | qBittorrent WebUI (`:8090`), Bearer Token Auth | Bind mount: `/mnt/media`, `/downloads/tv-sonarr` |
 | **CT 106** | LXC | `postgresql.lan`| DHCP (`10.10.0.x`) | Shared PostgreSQL (`:5432`), Adminer (`:80/adminer`) | Databases: `openkos`, `firefly` |
-| **LXC** | LXC | `sonarr.lan` | DHCP (`10.10.0.x`) | TV show automation (`:8989`), Post-import relocate hook | `/mnt/media/TV` |
+| **CT 107** | LXC | `seer.lan` | DHCP (`10.10.0.x`) | Jellyseerr / Overseerr (`:5055`), Sonarr & Plex API | Local config |
+| **CT 108** | LXC | `sonarr.lan` | DHCP (`10.10.0.x`) | TV show automation (`:8989`), Post-import relocate hook | Bind mount: `/mnt/media` <-- Host SMB |
 | **CT 109** | LXC | `radarr.lan` | DHCP (`10.10.0.x`) | Movie automation (`:7878`), Plex Movie import | Bind mount: `/mnt/media/Movies` |
 | **CT 110** | LXC | `prowlarr.lan` | DHCP (`10.10.0.x`) | Indexer manager & proxy (`:9696`), syncs to Sonarr/Radarr | Local config |
 | **CT 111** | LXC | `bazarr.lan` | DHCP (`10.10.0.x`) | Subtitle automation (`:6767`), syncs with Sonarr/Radarr | Bind mount: `/mnt/media` |
-| **LXC** | LXC | `seer.lan` | DHCP (`10.10.0.x`) | Jellyseerr / Overseerr (`:5055`), Sonarr & Plex API | Local config |
 | **VPS** | Remote VM | `openvpn-oracle`| Cloud Mesh (`100.96.0.0/12`) | Cloud mesh ingress node / remote access point | OpenVPN / WireGuard mesh |
 
 ---

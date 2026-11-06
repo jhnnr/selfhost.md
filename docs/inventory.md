@@ -17,11 +17,11 @@ All modifications to the homelab infrastructure **must** be recorded here to pre
 | **CT 104** | `plex.lan` | LXC | DHCP (`10.10.0.x`) | `vmbr1` | 4 vCPU / 4GB RAM | Plex Media Server |
 | **CT 105** | `qbit.lan` | LXC | DHCP (`10.10.0.x`) | `vmbr1` | 2 vCPU / 2GB RAM | qBittorrent Downloader |
 | **CT 106** | `postgresql.lan`| LXC | DHCP (`10.10.0.x`) | `vmbr1` | 2 vCPU / 2GB RAM | Shared PostgreSQL & Adminer |
-| — | `sonarr.lan` | LXC | DHCP (`10.10.0.x`) | `vmbr1` | 2 vCPU / 1GB RAM | Sonarr TV Show Automation |
+| **CT 107** | `seer.lan` | LXC | DHCP (`10.10.0.x`) | `vmbr1` | 2 vCPU / 1GB RAM | Jellyseerr / Overseerr Discovery |
+| **CT 108** | `sonarr.lan` | LXC | DHCP (`10.10.0.x`) | `vmbr1` | 2 vCPU / 1GB RAM | Sonarr TV Show Automation |
 | **CT 109** | `radarr.lan` | LXC | DHCP (`10.10.0.x`) | `vmbr1` | 2 vCPU / 1GB RAM | Radarr Movie Automation |
 | **CT 110** | `prowlarr.lan` | LXC | DHCP (`10.10.0.x`) | `vmbr1` | 1 vCPU / 512MB RAM | Prowlarr Indexer Proxy & Sync |
 | **CT 111** | `bazarr.lan` | LXC | DHCP (`10.10.0.x`) | `vmbr1` | 1 vCPU / 512MB RAM | Bazarr Subtitle Automation |
-| — | `seer.lan` | LXC | DHCP (`10.10.0.x`) | `vmbr1` | 2 vCPU / 1GB RAM | Jellyseerr / Overseerr Discovery |
 | — | `openvpn-oracle`| Remote VPS | `100.96.0.0/12` (Mesh)| Cloud Mesh | 1 OCPU / 1GB RAM | Remote Access Cloud Mesh Node |
 
 ---
@@ -75,5 +75,5 @@ All modifications to the homelab infrastructure **must** be recorded here to pre
 | `/mnt/pve/smb-rclone.lan/Media` | Proxmox Bind Mount | `plex.lan`:`/mnt/media` | Final Plex library files (Movies ID 2, TV ID 3) |
 | `/mnt/pve/smb-rclone.lan/Media` | Proxmox Bind Mount | `qbit.lan`:`/mnt/media` | Torrent download seeding and target destination |
 | `/mnt/pve/smb-rclone.lan/Media` | Proxmox Bind Mount | `radarr.lan`:`/mnt/media` | Movie library directory (`/mnt/media/Movies`) |
+| `/mnt/pve/smb-rclone.lan/Media` | Proxmox Bind Mount | `sonarr.lan`:`/mnt/media` | TV library directory (`/mnt/media/TV`) |
 | `/mnt/pve/smb-rclone.lan/Media` | Proxmox Bind Mount | `bazarr.lan`:`/mnt/media` | Subtitle file read/write access |
-| `/mnt/media/TV` | Local / NFS / Bind | `sonarr.lan`:`/mnt/media/TV` | Sonarr root TV library folder |
