@@ -17,6 +17,9 @@
 
 - [Proxmox Host (pve01)](nodes/pve01.md)
 - [qBittorrent (CT 105)](containers/ct105-qbit.md)
+- [Radarr (CT 109)](containers/ct109-radarr.md)
+- [Prowlarr (CT 110)](containers/ct110-prowlarr.md)
+- [Bazarr (CT 111)](containers/ct111-bazarr.md)
 
 ---
 

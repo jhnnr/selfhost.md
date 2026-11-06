@@ -60,6 +60,9 @@ selfhost.md/
 │   │   ├── ct104-plex.md
 │   │   ├── ct105-qbit.md
 │   │   ├── ct106-postgresql.md
+│   │   ├── ct109-radarr.md
+│   │   ├── ct110-prowlarr.md
+│   │   ├── ct111-bazarr.md
 │   │   ├── sonarr.md
 │   │   └── seer.md
 │   ├── virtual-machines/           # VM documentation

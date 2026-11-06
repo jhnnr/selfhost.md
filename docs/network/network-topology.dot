@@ -35,32 +35,32 @@ digraph NetworkTopology {
         arrowsize = 0.75
     ];
 
-    // WAN Entry Point
+    // Sole top node: Public Internet
     wan [
-        label = "Public Internet / Mobile Data",
+        label = "Public Internet",
         shape = ellipse,
         fillcolor = "#0f172a",
         color = "#38bdf8",
         fontcolor = "#f8fafc"
     ];
 
-    // Home Physical ISP Router
+    // Physical Network Path
     router [
-        label = "Home ISP Router\n192.168.100.1/24 (br0)\nStatic Route: 10.10.0.0/24\nvia 192.168.100.2",
+        label = "Home ISP Router\n192.168.100.1/24 (br0)\nStatic Route: 10.10.0.0/24 via 192.168.100.2",
         fillcolor = "#1e293b",
         color = "#60a5fa"
     ];
 
-    // Cloudflare Edge / Mesh (Connects directly into cloudflared.lan)
+    // Cloudflare Edge / Mesh
     cf_mesh [
         label = "Cloudflare Edge / Mesh\nSubnet: 100.96.0.0/12\nZero-Trust Ingress",
         fillcolor = "#1e293b",
         color = "#f97316"
     ];
 
-    // Separate Oracle Cloud VPN Node
+    // Oracle Cloud VPS Node (connected via Cloudflare Mesh)
     vps_oracle [
-        label = "Oracle Cloud VPS (openvpn-oracle)\nCloud Mesh Node\nRemote Ingress Gateway",
+        label = "Oracle Cloud VPS (openvpn-oracle)\nCloud Mesh Node\nRemote Access Point",
         fillcolor = "#1e293b",
         color = "#a855f7"
     ];
@@ -125,39 +125,12 @@ digraph NetworkTopology {
             color = "#a855f7"
         ];
 
-        // Dedicated Docker Host VM
-        subgraph cluster_docker {
-            label = "[VM 102] docker.lan (DHCP) [16GB RAM]";
-            fontcolor = "#cbd5e1";
-            fontsize = 11;
-            style = "filled";
-            fillcolor = "#1e293b";
-            color = "#38bdf8";
-
-            openkos [
-                label = "OpenKOS Suite (Uses CT 106)\n- openkos-web-1 (:8181 -> :8080)\n- openkos-queue-1 & scheduler-1\n- openkos-redis-1 (:6379)\n- openkos-mailpit-1 (:8025 / :1025)",
-                fillcolor = "#0f172a",
-                color = "#0284c7"
-            ];
-
-            firefly [
-                label = "Firefly III Suite (Uses CT 106)\n- firefly_iii_core (:800 -> :8080)\n- firefly_iii_importer (:810 -> :8080)\n- firefly_iii_cron",
-                fillcolor = "#0f172a",
-                color = "#0284c7"
-            ];
-
-            podpdf [
-                label = "Privacy-First PDF\n- podpdf (:2873 -> :8080)",
-                fillcolor = "#0f172a",
-                color = "#0284c7"
-            ];
-
-            mgmt_gaming [
-                label = "Gaming & Administration\n- steam-ish (:3112 -> :3000)\n- portainer (:9443 / :8000)",
-                fillcolor = "#0f172a",
-                color = "#0284c7"
-            ];
-        }
+        // Dedicated Docker Host VM - Flat list of hosted projects without categorization
+        vm102 [
+            label = "[VM 102] docker.lan (DHCP) [16GB RAM]\nHosted Projects:\n- OpenKOS\n- Firefly III\n- PodPDF\n- Steam-ish\n- Portainer",
+            fillcolor = "#1e293b",
+            color = "#38bdf8"
+        ];
 
         // Storage Controller
         ct103 [
@@ -166,9 +139,9 @@ digraph NetworkTopology {
             color = "#eab308"
         ];
 
-        // Media Server
+        // Media Playback Server
         ct104 [
-            label = "[CT 104] plex.lan (DHCP)\nPlex Media Server (:32400)\nMovies (Section 2) | TV Shows (Section 3)",
+            label = "[CT 104] plex.lan (DHCP)\nPlex Media Server (:32400)\nMovies: Section 2 | TV Shows: Section 3",
             fillcolor = "#1e293b",
             color = "#ec4899"
         ];
@@ -180,13 +153,35 @@ digraph NetworkTopology {
             color = "#06b6d4"
         ];
 
-        // Media Automation
+        // TV Automation
         sonarr [
             label = "sonarr.lan (LXC)\nTV Automation (:8989)\nLibrary: /mnt/media/TV\nPost-Import Hook: qbit-relocate.sh",
             fillcolor = "#1e293b",
             color = "#14b8a6"
         ];
 
+        // Movie Automation
+        ct109 [
+            label = "[CT 109] radarr.lan (DHCP)\nMovie Automation (:7878)\nLibrary: /mnt/media/Movies",
+            fillcolor = "#1e293b",
+            color = "#f59e0b"
+        ];
+
+        // Indexer Management
+        ct110 [
+            label = "[CT 110] prowlarr.lan (DHCP)\nIndexer Manager & Proxy (:9696)\nSync: Sonarr & Radarr",
+            fillcolor = "#1e293b",
+            color = "#3b82f6"
+        ];
+
+        // Subtitle Automation
+        ct111 [
+            label = "[CT 111] bazarr.lan (DHCP)\nSubtitle Management (:6767)\nSync: Sonarr & Radarr",
+            fillcolor = "#1e293b",
+            color = "#10b981"
+        ];
+
+        // Media Discovery & Requests
         seer [
             label = "seer.lan (LXC)\nJellyseerr / Overseerr (:5055)\nMedia Discovery & Requests",
             fillcolor = "#1e293b",
@@ -194,49 +189,56 @@ digraph NetworkTopology {
         ];
     }
 
-    // Top-Level Connections
+    // Top-Level Ingress Routing
+    // Only Public Internet at the top
     wan -> router [color = "#60a5fa"];
     wan -> cf_mesh [color = "#f97316"];
-    wan -> vps_oracle [color = "#a855f7"];
 
-    // Physical uplink from ISP Router to Proxmox vmbr0
+    // Home ISP router is the ONLY link connected to vmbr0
     router -> vmbr0 [color = "#60a5fa"];
 
-    // Oracle VPS Cloud Mesh Node connects to Proxmox vmbr0
-    vps_oracle -> vmbr0 [color = "#a855f7"];
+    // Oracle Cloud VPS connects through Cloudflare Edge / Mesh
+    cf_mesh -> vps_oracle [color = "#a855f7"];
 
     // Cloudflare Edge / Mesh connects directly through cloudflared.lan
     cf_mesh -> ct101 [color = "#f97316", penwidth = 1.5];
 
-    // Proxmox Bridge Interconnect (Physical -> NAT Subnet)
+    // Proxmox Internal NAT Bridge
     vmbr0 -> vmbr1 [color = "#60a5fa"];
 
-    // Subnet Distribution from vmbr1 Gateway
+    // Subnet Distribution from Gateway
     vmbr1 -> ct100;
     vmbr1 -> ct101;
     vmbr1 -> ct106;
-    vmbr1 -> openkos;
-    vmbr1 -> firefly;
-    vmbr1 -> podpdf;
-    vmbr1 -> mgmt_gaming;
+    vmbr1 -> vm102;
     vmbr1 -> ct103;
     vmbr1 -> ct104;
     vmbr1 -> ct105;
     vmbr1 -> sonarr;
+    vmbr1 -> ct109;
+    vmbr1 -> ct110;
+    vmbr1 -> ct111;
     vmbr1 -> seer;
 
-    // Database Connections from Docker Containers to CT 106
-    openkos -> ct106 [color = "#a855f7"];
-    firefly -> ct106 [color = "#a855f7"];
+    // Database Connection from Docker VM to PostgreSQL
+    vm102 -> ct106 [color = "#a855f7"];
 
-    // Storage Pipeline: CT 103 Samba Share -> Host Mount -> LXC Bind Mounts
+    // Storage Pipeline (Samba Share -> Host Mount -> LXC Bind Mounts)
     ct103 -> host_smb [style = "dashed", color = "#eab308"];
     host_smb -> ct104 [color = "#ec4899", penwidth = 1.6];
     host_smb -> ct105 [color = "#06b6d4", penwidth = 1.6];
+    host_smb -> ct109 [color = "#f59e0b", penwidth = 1.6];
+    host_smb -> ct111 [color = "#10b981", penwidth = 1.6];
 
-    // Media Pipeline Interconnects
+    // Media Automation Pipeline Interconnects
     seer -> sonarr [color = "#14b8a6"];
+    seer -> ct109 [color = "#f59e0b"];
     seer -> ct104 [color = "#8b5cf6"];
+    ct110 -> sonarr [color = "#3b82f6"];
+    ct110 -> ct109 [color = "#3b82f6"];
     sonarr -> ct105 [color = "#06b6d4"];
+    ct109 -> ct105 [color = "#06b6d4"];
+    sonarr -> ct111 [color = "#10b981"];
+    ct109 -> ct111 [color = "#10b981"];
     ct105 -> ct104 [style = "dotted", color = "#ec4899"];
 }
